@@ -135,25 +135,29 @@ for (let i = 0; i < formInputs.length; i++) {
 }
 
 
-
 // page navigation variables
 const navigationLinks = document.querySelectorAll("[data-nav-link]");
 const pages = document.querySelectorAll("[data-page]");
 
-// add event to all nav link
-for (let i = 0; i < navigationLinks.length; i++) {
-  navigationLinks[i].addEventListener("click", function () {
+// improved, whitespace-safe navigation
+navigationLinks.forEach((link) => {
+  link.addEventListener("click", function () {
+    // get clicked link text safely
+    let clicked = this.innerText.trim().toLowerCase();
 
-    for (let i = 0; i < pages.length; i++) {
-      if (this.innerHTML.toLowerCase() === pages[i].dataset.page) {
-        pages[i].classList.add("active");
+    pages.forEach((page, i) => {
+      let target = page.dataset.page.trim().toLowerCase();
+
+      if (clicked === target) {
+        // activate matching page
+        page.classList.add("active");
         navigationLinks[i].classList.add("active");
         window.scrollTo(0, 0);
       } else {
-        pages[i].classList.remove("active");
+        // deactivate non-matching pages
+        page.classList.remove("active");
         navigationLinks[i].classList.remove("active");
       }
-    }
-
+    });
   });
-}
+});

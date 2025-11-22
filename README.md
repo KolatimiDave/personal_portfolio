@@ -1,44 +1,61 @@
-# vCard - Personal portfolio
+# David Olukolatimi — Personal Portfolio (vCard Enhanced)
 
-![GitHub repo size](https://img.shields.io/github/repo-size/codewithsadee/vcard-personal-portfolio)
-![GitHub stars](https://img.shields.io/github/stars/codewithsadee/vcard-personal-portfolio?style=social)
-![GitHub forks](https://img.shields.io/github/forks/codewithsadee/vcard-personal-portfolio?style=social)
-[![Twitter Follow](https://img.shields.io/twitter/follow/codewithsadee_?style=social)](https://twitter.com/intent/follow?screen_name=codewithsadee_)
-[![YouTube Video Views](https://img.shields.io/youtube/views/SoxmIlgf2zM?style=social)](https://youtu.be/SoxmIlgf2zM)
+A modern, fully responsive personal portfolio website for showcasing  
+**Machine Learning Engineering, Data Science, MLOps, Cloud, and AI projects.**  
+Built using **HTML, CSS, and JavaScript**.
 
-vCard is a fully responsive personal portfolio website, responsive for all devices, built using HTML, CSS, and JavaScript.
+This is a customized and extended version of the vCard template originally created by **codewithsadee**.
 
-## Demo
+---
 
-![vCard Desktop Demo](./website-demo-image/desktop.png "Desktop Demo")
-![vCard Mobile Demo](./website-demo-image/mobile.png "Mobile Demo")
+## 🚀 Live Demo (Render Deployment)
+> Coming soon — after deployment on Render.
 
-## Prerequisites
+---
 
-Before you begin, ensure you have met the following requirements:
+## 📸 Screenshots
 
-* [Git](https://git-scm.com/downloads "Download Git") must be installed on your operating system.
+### Desktop View
+![Desktop Demo](./website-demo-image/desktop.png)
 
-## Installing vCard
+### Mobile View
+![Mobile Demo](./website-demo-image/mobile.png)
 
-To install **vCard**, follow these steps:
+---
 
-Linux and macOS:
+## ✨ Features
 
-```bash
-sudo git clone https://github.com/codewithsadee/vcard-personal-portfolio.git
-```
+- Fully responsive personal portfolio  
+- Single-page smooth navigation (About, Resume, Portfolio, Blog, Contact)  
+- Dynamic modal for testimonials  
+- Project filtering (Computer Vision, NLP, ML & Analytics)  
+- Custom skills, experience, and AI/ML project sections  
+- Contact form with built-in validation  
+- Sidebar with expandable contact details  
+- Clean, modern UI  
+- Lightweight and fast (no frameworks required)
 
-Windows:
+---
 
-```bash
-git clone https://github.com/codewithsadee/vcard-personal-portfolio.git
-```
+## 🧠 Tech Stack
 
-## Contact
+- **HTML5**  
+- **CSS3**  
+- **JavaScript (Vanilla JS)**  
+- **Ionicons**  
+- **Responsive Grid & Flex UI**  
 
-If you want to contact me you can reach me at [Twitter](https://www.x.com/codewithsadee_).
+---
 
-## License
+## 📂 Project Structure
 
-MIT
+```plaintext
+/
+│── assets/
+│   ├── css/
+│   ├── js/
+│   └── images/
+│
+│── index.html
+│── README.md
+│── LICENSE
