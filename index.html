@@ -23,10 +23,11 @@
 
   <title>David Olukolatimi - ML Engineer & Data Scientist</title>
 
-  <!-- Favicon -->
-  <link rel="shortcut icon"
-        href="./assets/images/logo.ico"
-        type="image/x-icon">
+  <!-- Title logo -->
+ 
+  <link rel="icon"
+      type="image/png"
+      href="./assets/images/title_image.jpg">
 
   <!-- Custom CSS -->
   <link rel="stylesheet"
@@ -1880,14 +1881,18 @@
               </div>
 
               <div class="input-group">
-                <label for="email" class="form-label">Email address <span class="required">*</span></label>
-                <input type="email"
-                       id="email"
-                       name="email"
-                       class="form-input"
-                       placeholder="Enter your email"
-                       required
-                       data-form-input>
+                <label for="email" class="form-label form-label-row">
+                <span>Email address <span class="required">*</span></span>
+
+                <span class="info-tooltip" tabindex="0" aria-label="Why do we ask for your email?">
+                  <span class="info-icon" aria-hidden="true">i</span>
+
+                  <span class="tooltip-text" role="tooltip">
+                    Your email isn’t used to send this message (you’re not logged in).
+                    It’s only needed so I can reply back to you after I receive your message.
+                  </span>
+                </span>
+              </label>
               </div>
             </div>
 

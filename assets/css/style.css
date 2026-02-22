@@ -3092,3 +3092,87 @@ main {
     overflow: visible;
   }
 }
+
+
+/* Label row (label + info icon) */
+.form-label-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Tooltip wrapper */
+.info-tooltip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: help;
+  outline: none;
+}
+
+/* The little "i" circle */
+.info-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  border: 1px solid currentColor;
+  opacity: 0.85;
+}
+
+/* Tooltip bubble */
+.tooltip-text {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(320px, 75vw);
+  padding: 10px 12px;
+  border-radius: 10px;
+
+  background: rgba(15, 23, 42, 0.95);
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.35;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 180ms ease, transform 180ms ease, visibility 180ms ease;
+  z-index: 9999;
+}
+
+/* Tooltip arrow */
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 7px;
+  border-style: solid;
+  border-color: rgba(15, 23, 42, 0.95) transparent transparent transparent;
+}
+
+/* Show on hover + keyboard focus */
+.info-tooltip:hover .tooltip-text,
+.info-tooltip:focus .tooltip-text {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-2px);
+}
+
+/* Light theme tweak */
+body.light-theme .tooltip-text {
+  background: rgba(17, 24, 39, 0.95);
+}
+body.light-theme .tooltip-text::after {
+  border-color: rgba(17, 24, 39, 0.95) transparent transparent transparent;
+}
