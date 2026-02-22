@@ -913,6 +913,18 @@ body.light-theme .social-link.x-twitter img {
   background: conic-gradient(var(--blue-primary) calc(var(--value) * 1%), var(--brown-200) 0);
 }
 
+.skill-chart {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 0.5rem;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--blue-primary) calc(var(--value) * 1%),
+    var(--brown-border) 0
+  );
+}
+
 .skill-chart::before {
   content: "";
   position: absolute;
@@ -1353,25 +1365,17 @@ body.light-theme .testimonials .content-card::before {
 
 /* Bullet styling for resume timeline. Each timeline-text block gets a custom
    bullet to visually separate unique accomplishments. */
-.timeline-text {
+
+
+/* Update */
+
+/* Keep the custom dot only for the short summary paragraph */
+p.timeline-text {
   position: relative;
   padding-left: 1rem;
 }
 
-.timeline-text::before {
-  content: '\2022';
-  position: absolute;
-  left: 0;
-  top: 0.2rem;
-  color: var(--blue-primary);
-  font-weight: bold;
-  line-height: 1;
-  font-size: 0.8rem;
-}
-
-/* Update */
-
-.degree-class{
+p.degree-class{
   margin-left: 0.5rem;
   padding: 0.1rem 0.5rem;
   border-radius: 999px;
@@ -2990,4 +2994,54 @@ body.light-theme .navbar {
 /* Ensure bottom navbar stays above fixed banners */
 .navbar {
   z-index: 1101;
+}
+
+/* Real bullets for resume experience lists */
+.timeline-item ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
+}
+
+.timeline-item ul li {
+  list-style: disc;
+  display: list-item;
+  margin-bottom: 0.4rem;
+}
+
+/* Experience timeline text and bullets (standardised) */
+.timeline-summary {
+  color: var(--light-gray);
+  font-weight: var(--fw-300);
+  line-height: 1.6;
+}
+
+.timeline-bullets {
+  list-style: disc;
+  padding-left: 1.25rem;
+  margin-top: 0.5rem;
+  color: var(--light-gray);
+  font-weight: var(--fw-300);
+}
+
+.timeline-bullets li {
+  list-style: disc;
+  display: list-item;
+  margin-bottom: 0.4rem;
+}
+
+
+/* Reduce extra horizontal spacing */
+main {
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
+/* Optional: make cards use full width on small screens */
+@media (max-width: 580px) {
+  .sidebar,
+  article {
+    width: 100%;
+    margin-inline: 0;
+  }
 }

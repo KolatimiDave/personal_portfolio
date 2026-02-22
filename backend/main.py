@@ -1,74 +1,89 @@
 """
-Backend for the contact form
-===========================
+FastAPI backend for the personal portfolio contact form.
 
-This FastAPI application exposes a single endpoint `/api/contact` that
-receives JSON payloads from the portfolio's contact form.  On receiving
-the payload, it validates the data, then sends an email via the Resend
-API using the provided API key.  The email is addressed to David's
-inbox with the visitor's details included and sets `reply_to` so
-David can respond directly to the sender.
-
-To run this server locally, install the dependencies and start the
-server with uvicorn:
-
-```
-pip install fastapi uvicorn resend pydantic[email]
-uvicorn main:app --host 0.0.0.0 --port 8000
-```
-
-Replace the API key below with your real Resend API key.  For security,
-you can also load it from an environment variable instead of hardcoding.
+This module defines a simple API endpoint that accepts contact form
+submissions and sends them as an email via the Resend service. All
+configuration (Resend API key, sender and recipient addresses) is
+provided via environment variables, so no secrets are committed in
+source control. The endpoint performs basic validation on the name,
+email and message fields before sending the email and returns a
+JSON object indicating success or failure.
 """
 
+import os
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, EmailStr, Field
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, EmailStr, Field
 import resend
 
-# Replace this with your real Resend API key provided by the user.
-resend.api_key = "re_JGsiTNwe_NkKkyKYsgeFmXfatkPCAGJYG"
+# Load configuration from environment variables. These values should be
+# defined in your Render (or other hosting) service settings. See the
+# Render documentation for how to add environment variables.
+RESEND_API_KEY = os.getenv("RESEND_API_KEY")
+TO_EMAIL = os.getenv("TO_EMAIL")
+FROM_EMAIL = os.getenv("FROM_EMAIL")
 
+# Assign the API key to the Resend SDK. If the key is missing, the
+# Resend client will raise an exception when attempting to send mail.
+if RESEND_API_KEY:
+    resend.api_key = RESEND_API_KEY
 
 app = FastAPI()
 
-# Allow requests from any origin; adjust in production
+
+FRONTEND_URLS = [
+    "https://david-olukolatimi.onrender.com",
+    "https://davidolukolatimi.com",
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=FRONTEND_URLS,
+    allow_credentials=True,
     allow_methods=["POST"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
-
 class ContactPayload(BaseModel):
-    """Schema for validating the contact form payload."""
-
-    name: str = Field(..., min_length=1, max_length=100)
+    """Schema for incoming contact form submissions."""
+    name: str = Field(min_length=1, max_length=100)
     email: EmailStr
-    message: str = Field(..., min_length=1, max_length=500)
+    message: str = Field(min_length=1, max_length=500)
 
 
 @app.post("/api/contact")
 def contact(payload: ContactPayload):
-    """Handle incoming contact form submissions and send via Resend."""
+    """
+    Receive contact form submissions and forward them as an email via Resend.
+
+    The `payload` is validated by Pydantic to ensure the presence and
+    correctness of the fields. If successful, an email is sent using
+    the Resend API and a JSON response with `ok: true` is returned.
+    If sending fails, this endpoint returns a 500 status code with the
+    error message.
+    """
+    # Determine who the email should be sent to. Default to the
+    # maintainer's address if not provided via environment.
+    recipient = TO_EMAIL 
+    sender = FROM_EMAIL 
     try:
-        # Compose the email HTML body
-        html_body = f"""
-            <h2>New Contact Form Message</h2>
-            <p><strong>Name:</strong> {payload.name}</p>
-            <p><strong>Email:</strong> {payload.email}</p>
-            <p><strong>Message:</strong></p>
-            <p>{payload.message}</p>
-        """
-        resend.Emails.send({
-            "from": "onboarding@resend.dev",
-            "to": "davidkolatimi@gmail.com",
-            "subject": f"New contact form message from {payload.name}",
-            "reply_to": payload.email,
-            "html": html_body
-        })
+        resend.Emails.send(
+            {
+                "from": sender,
+                "to": [recipient],
+                "subject": f"New contact form message from {payload.name}",
+                "reply_to": payload.email,
+                "html": f"""
+                    <h2>New Contact Form Message</h2>
+                    <p><strong>Name:</strong> {payload.name}</p>
+                    <p><strong>Email:</strong> {payload.email}</p>
+                    <p><strong>Message:</strong></p>
+                    <p>{payload.message}</p>
+                """,
+            }
+        )
         return {"ok": True}
     except Exception as exc:
-        # Log the exception and return a 500 error
-        raise HTTPException(status_code=500, detail="Email failed to send")
+        # Log the exception details and return an error response.
+        # In production, consider logging this to an external service.
+        raise HTTPException(status_code=500, detail=f"Email failed to send: {exc}")
