@@ -668,14 +668,14 @@ if (themeToggleBtn) {
           return;
         }
         try {
-          const res = await fetch("/api/contact", {
+            const res = await fetch("https://personal-portfolio-backend-gze7.onrender.com/api/contact", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload)
           });
           const data = await res.json();
           if (data.ok) {
-            if (errorEl) errorEl.textContent = "Message sent successfully ✅";
+            if (errorEl) errorEl.textContent = "Message sent successfully to davidkolatimi@gmail.com ✅";
             contactForm.reset();
           } else {
             if (errorEl) errorEl.textContent = data.error || "Failed to send message.";
