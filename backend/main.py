@@ -21,8 +21,6 @@ RESEND_API_KEY = os.getenv("RESEND_API_KEY")
 TO_EMAIL = os.getenv("TO_EMAIL")
 FROM_EMAIL = os.getenv("FROM_EMAIL")
 
-# Optional example env (as you requested)
-LLM = os.getenv("LLM")
 
 # Configure Resend SDK
 if RESEND_API_KEY:
@@ -60,7 +58,6 @@ def health():
         "has_resend_key": bool(RESEND_API_KEY),
         "has_to_email": bool(TO_EMAIL),
         "has_from_email": bool(FROM_EMAIL),
-        "llm": LLM or None,
     }
 
 @app.post("/api/contact")
