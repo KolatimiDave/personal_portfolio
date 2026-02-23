@@ -3129,9 +3129,13 @@ main {
 .tooltip-text {
   position: absolute;
   bottom: calc(100% + 10px);
-  left: 50%;
-  transform: translateX(-50%);
-  width: min(320px, 75vw);
+  right: 0;                /* anchor to right edge instead of center */
+  left: auto;
+  transform: translateY(0);
+
+  width: min(320px, 85vw);
+  max-width: 90vw;
+
   padding: 10px 12px;
   border-radius: 10px;
 
@@ -3149,24 +3153,23 @@ main {
   z-index: 9999;
 }
 
-/* Tooltip arrow */
 .tooltip-text::after {
   content: "";
   position: absolute;
   top: 100%;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 12px;   /* aligns arrow under the icon */
+  left: auto;
+
   border-width: 7px;
   border-style: solid;
   border-color: rgba(15, 23, 42, 0.95) transparent transparent transparent;
 }
 
-/* Show on hover + keyboard focus */
 .info-tooltip:hover .tooltip-text,
 .info-tooltip:focus .tooltip-text {
   opacity: 1;
   visibility: visible;
-  transform: translateX(-50%) translateY(-2px);
+  transform: translateY(-2px);
 }
 
 /* Light theme tweak */
