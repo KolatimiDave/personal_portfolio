@@ -3180,32 +3180,3 @@ body.light-theme .tooltip-text::after {
   border-color: rgba(17, 24, 39, 0.95) transparent transparent transparent;
 }
 
-
-/* =====================================================
-   MOBILE TOOLTIP POSITIONING (Cleaner Version)
-   On small screens, show tooltip BELOW the icon
-   ===================================================== */
-@media (max-width: 480px) {
-
-  .tooltip-text {
-    top: calc(100% + 8px);   /* place below icon */
-    bottom: auto;            /* disable bottom positioning */
-
-    left: 0;                 /* anchor to left edge */
-    transform: none;         /* remove centering */
-
-    width: calc(100vw - 32px);  /* prevent overflow */
-    max-width: none;
-  }
-
-  .tooltip-text::after {
-    top: -14px;  /* move arrow above bubble */
-    left: 16px;
-    transform: none;
-
-    border-width: 7px;
-    border-style: solid;
-    border-color: transparent transparent rgba(15, 23, 42, 0.95) transparent;
-  }
-
-}
