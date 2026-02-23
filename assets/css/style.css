@@ -3180,3 +3180,47 @@ body.light-theme .tooltip-text::after {
   border-color: rgba(17, 24, 39, 0.95) transparent transparent transparent;
 }
 
+
+
+/* Put this at the VERY END of style.css */
+.form-label-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  position: relative;
+}
+
+.form-label-row .info-tooltip {
+  margin-left: auto;
+  position: static; /* tooltip will position relative to label row */
+}
+
+.form-label-row .tooltip-text {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  right: 0;
+  left: auto;
+  transform: none;
+  width: min(320px, calc(100vw - 48px));
+  max-width: calc(100vw - 48px);
+}
+
+.form-label-row .tooltip-text::after {
+  left: auto;
+  right: 12px;
+  transform: none;
+}
+
+.form-label-row .info-tooltip:hover .tooltip-text,
+.form-label-row .info-tooltip:focus .tooltip-text {
+  transform: translateY(-2px);
+}
+
+@media (max-width: 580px) {
+  .form-label-row .tooltip-text {
+    width: calc(100vw - 32px);
+    max-width: calc(100vw - 32px);
+    right: 0;
+  }
+}
