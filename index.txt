@@ -1,0 +1,243 @@
+Personal Portfolio (David Olukolatimi)
+
+# sidebar
+
+alt = David Olukolatimi
+David Olukolatimi
+Machine Learning Engineer & Data Scientist
+
+Show Contacts
+
+Email
+kolatimidavid@gmail.com
+
+Phone
++234 704 103 5041
+
+Birthday
+November 11, 2001
+
+Location
+Lagos, Nigeria
+
+GitHub
+https://github.com/KolatimiDave
+
+LinkedIn
+https://www.linkedin.com/in/olukolatimidavid
+
+Medium
+https://medium.com/@kolatimidavid
+
+
+
+# navbar
+
+About
+Resume
+Portfolio
+Blog
+Contact
+
+
+
+# about
+
+About me
+
+I am a Machine Learning Engineer and Data Scientist with hands-on experience building, deploying, and scaling production-grade AI systems. My work spans predictive modelling, deep learning, NLP, computer vision, cloud deployment, and MLOps.
+
+At AXA Mansard, I support core business operations by architecting data pipelines, developing machine learning APIs, optimising ETL workflows, and building analytics tools for decision-making.
+
+I’ve also worked on AI pipelines for ExamRocket, open-source community projects, and various AI/ML competitions (Zindi, Kaggle, DSN). I enjoy building intelligent systems that are practical, reliable, and impactful.
+
+I am deeply interested in the intersection of machine learning, cloud systems, and automation — and how AI can simplify workflows and empower teams.
+
+
+
+## service
+
+What I’m doing
+
+alt = ML icon
+AI Engineering
+Building AI-powered applications for CV, NLP, classification, forecasting, and automation.
+
+alt = data pipeline icon
+Data Engineering
+Designing fast, reliable ETL pipelines, SQL optimisation, data modelling, and job automation.
+
+alt = deployment icon
+MLOps & Deployments
+Containerising and deploying ML services using FastAPI, Docker, CI/CD, Kubernetes, and cloud.
+
+alt = software icon
+Software Development
+Building full-stack data-driven applications and internal tools.
+
+
+
+## testimonials
+
+Testimonials
+
+alt = Engineering Lead
+Engineering Lead
+“David is the engineer you want for systems that actually need to work reliably. He understands modelling and infrastructure — and communicates clearly with teams.”
+
+alt = Product Manager
+Product Manager
+“David bridges product and engineering extremely well. He turns requirements into clear technical steps and delivers stable AI features.”
+
+alt = ML Teammate
+ML Teammate
+“Pairing with David always leaves you with new insights. He explains complex concepts simply and builds solutions that scale.”
+
+
+
+## clients
+
+Clients & Collaborations
+
+Generic tech/cloud/AI ecosystem logos representing:
+– AXA Mansard
+– DSN / Data Science Nigeria
+– Zindi Africa
+– ExamRocket
+– OpenVINO / Open Source AI Ecosystem
+– Learning communities & innovation hubs
+
+
+
+# resume
+
+Resume
+
+## Education
+
+University of Lagos — B.Sc. Computer Science
+Graduation year (update)
+Focused on algorithms, data structures, software engineering, and AI fundamentals.
+
+AI/ML Certifications — self-paced & community-based
+DeepLearning.AI, Microsoft Learn, DSN Bootcamps, Zindi & Kaggle competitions.
+
+
+## Experience
+
+Machine Learning Engineer / Data Engineer — AXA Mansard
+2022 — Present
+– Designed predictive ML models used across operations.
+– Built ETL/ELT pipelines and SQL-optimised data flows.
+– Developed FastAPI microservices for real-time inference.
+– Containerised and deployed services using Docker, Azure, and CI/CD pipelines.
+– Supported analytics dashboards and automated reporting systems.
+
+ML Engineer / AI Pipeline Engineer — ExamRocket
+2025
+– Improved inference speed and stability of speech/text grading pipelines.
+– Designed scoring logic combining ML models with rule-based systems.
+– Collaborated with product teams to optimise evaluation frameworks.
+
+Data Scientist & Community Contributor — Zindi / DSN / Kaggle
+2019 — Present
+– Worked on churn prediction, classification, financial analytics, and CV problems.
+– Shared modelling ideas, built open-source notebooks, and collaborated on community tasks.
+
+
+## My Skills
+
+Machine Learning — 90%
+Deep Learning (TensorFlow, PyTorch) — 85%
+NLP & Semantic Similarity — 85%
+Computer Vision (OpenVINO, CV pipelines) — 80%
+
+Data Engineering / ETL — 85%
+APIs & Microservices (FastAPI, Flask) — 90%
+Cloud & DevOps (Azure, AWS, Docker, CI/CD) — 80%
+Python & SQL — 95%
+Analytics & BI (PowerBI, Notebooks) — 80%
+
+
+
+# portfolio
+
+Portfolio
+
+Categories:
+All
+Computer Vision
+NLP & Text
+ML & Analytics
+
+Select category:
+All
+Computer Vision
+NLP & Text
+ML & Analytics
+
+Projects:
+
+alt = people counter
+People Counter on Edge
+Computer Vision & Edge AI
+OpenVINO-based real-time human counting app on CPU/edge devices.
+
+alt = pointer controller
+Computer Pointer Controller
+Computer Vision
+Gaze-controlled pointer navigation using head pose + facial landmark tracking.
+
+alt = churn model
+Customer Churn Prediction
+ML & Analytics
+Predictive churn model using telecom data & feature engineering.
+
+alt = house prediction
+House Price Prediction
+Regression
+Advanced regression modelling with feature pipelines.
+
+alt = nlp similarity
+NLP Semantic Similarity Engine
+NLP
+Transformer-based semantic similarity system for text evaluation.
+
+alt = renewal prediction
+Customer Renewal Prediction Pipeline
+End-to-End ML/MLOps
+Pipeline for predicting renewal behaviour, deployed with FastAPI & Docker.
+
+
+
+# blog
+
+Blog
+
+alt = Opportunity Cost of Knowledge
+AI & Career
+2024
+Opportunity Cost of Knowledge in AI
+Thoughts on intentional learning, depth vs breadth, and staying relevant as an ML engineer.
+
+alt = MLOps journey
+MLOps
+Coming soon
+From Notebook to Production: A Practical MLOps Journey
+How to evolve an experiment into a production-ready model with monitoring, versioning, and CI/CD.
+
+
+
+# contact
+
+Contact
+
+Map: Lagos, Nigeria
+
+Contact Form
+
+Full name  
+Email address  
+Your message  
+
+Send Message
