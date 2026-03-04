@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
-<<<<<<< HEAD
   <!-- Root page (single page experience) -->
-=======
->>>>>>> 38f110f0372c9c6348783922d3ab3aef418a6b98
   <url>
     <loc>https://david-olukolatimi.onrender.com/</loc>
     <lastmod>2026-02-24</lastmod>
@@ -12,7 +9,6 @@
     <priority>1.0</priority>
   </url>
 
-<<<<<<< HEAD
   <!-- Individual pages for hybrid architecture -->
   <url>
     <loc>https://david-olukolatimi.onrender.com/home.html</loc>
@@ -57,17 +53,11 @@
     <priority>0.7</priority>
   </url>
   <!-- Resume PDF -->
-=======
->>>>>>> 38f110f0372c9c6348783922d3ab3aef418a6b98
   <url>
     <loc>https://david-olukolatimi.onrender.com/assets/resume/david_olukolatimi_resume.pdf</loc>
     <lastmod>2026-02-24</lastmod>
     <changefreq>yearly</changefreq>
-<<<<<<< HEAD
     <priority>0.5</priority>
-=======
-    <priority>0.6</priority>
->>>>>>> 38f110f0372c9c6348783922d3ab3aef418a6b98
   </url>
 
 </urlset>
