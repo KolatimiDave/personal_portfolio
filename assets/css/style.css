@@ -1058,12 +1058,12 @@ body.light-theme .skill-name {
 }
 
 .paystack-trust-panel {
-  display: grid;
-  grid-template-columns: 1.25fr 1fr auto;
+  display: flex;
   align-items: center;
-  gap: 1rem;
+  justify-content: space-between;
+  gap: 0.85rem;
   margin: 0 0 1.5rem;
-  padding: 1rem;
+  padding: 0.85rem 1rem;
   border: 1px solid var(--brown-border);
   border-radius: 8px;
   background: var(--brown-elevated);
@@ -1074,38 +1074,29 @@ body.light-theme .skill-name {
   color: var(--light-gray);
   font-size: var(--fs-7);
   line-height: 1.5;
-  margin-top: 0.35rem;
+  margin-top: 0.25rem;
 }
 
 .paystack-kicker {
   display: inline-flex;
   align-items: center;
+  gap: 0.5rem;
   color: var(--blue-primary-soft);
   font-size: var(--fs-6);
   font-weight: var(--fw-600);
 }
 
-.paystack-currency-note {
-  color: var(--accent-gold) !important;
-}
-
-.paystack-methods {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.paystack-method {
+.paystack-mark {
   display: inline-flex;
   align-items: center;
-  min-height: 28px;
-  padding: 0.3rem 0.55rem;
-  border: 1px solid var(--brown-border);
-  border-radius: 6px;
-  color: var(--white-2);
-  background: rgba(255, 255, 255, 0.04);
+  min-height: 24px;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  color: #ffffff;
+  background: #011b33;
   font-size: var(--fs-8);
-  font-weight: var(--fw-500);
+  font-weight: var(--fw-600);
+  letter-spacing: 0;
   white-space: nowrap;
 }
 
@@ -1153,12 +1144,6 @@ body.light-theme .paystack-trust-panel {
 
 body.light-theme .paystack-trust-copy p {
   color: var(--brown-700);
-}
-
-body.light-theme .paystack-method {
-  color: var(--brown-800);
-  background: #f8fafc;
-  border-color: #d1d5db;
 }
 
 body.light-theme .paystack-contact-link {
@@ -1267,7 +1252,8 @@ body.light-theme .service-contact-btn.is-quote:focus {
 
 @media (max-width: 900px) {
   .paystack-trust-panel {
-    grid-template-columns: 1fr;
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .paystack-contact-link {

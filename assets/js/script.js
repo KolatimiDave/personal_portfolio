@@ -137,8 +137,51 @@ const formBtn = document.querySelector("[data-form-btn]");
 
 
 // page navigation variables
-const navigationLinks = document.querySelectorAll("[data-nav-link]");
+const navigationLinks = document.querySelectorAll(".navbar-link");
 const pages = document.querySelectorAll("[data-page]");
+const pageRoutes = {
+  about: "/about/",
+  resume: "/resume/",
+  portfolio: "/portfolio/",
+  services: "/services/",
+  blog: "/blog/",
+  contact: "/contact/"
+};
+
+function pageNameFromPath(pathname) {
+  const cleanPath = pathname.replace(/\/index\.html$/, "/");
+  const match = cleanPath.match(/^\/(about|resume|portfolio|services|blog|contact)\/?$/);
+  return match ? match[1] : "about";
+}
+
+function pageNameFromLink(link) {
+  const textName = link.textContent.trim().toLowerCase();
+  if (pageRoutes[textName]) return textName;
+
+  try {
+    return pageNameFromPath(new URL(link.getAttribute("href"), window.location.origin).pathname);
+  } catch (err) {
+    return "";
+  }
+}
+
+function activatePage(pageName, options = {}) {
+  if (!pageRoutes[pageName]) return;
+
+  pages.forEach((page) => {
+    page.classList.toggle("active", page.dataset.page.trim().toLowerCase() === pageName);
+  });
+
+  navigationLinks.forEach((link) => {
+    link.classList.toggle("active", pageNameFromLink(link) === pageName);
+  });
+
+  if (options.push !== false && window.location.pathname !== pageRoutes[pageName]) {
+    history.pushState({ page: pageName }, "", pageRoutes[pageName]);
+  }
+
+  if (options.scroll !== false) window.scrollTo(0, 0);
+}
 
 /*
   Improved navigation logic: rather than relying on positional indexing of
@@ -147,31 +190,20 @@ const pages = document.querySelectorAll("[data-page]");
   It also updates the active class on navigation links based on their text.
 */
 navigationLinks.forEach((link) => {
-  link.addEventListener("click", function () {
-    const clicked = this.innerText.trim().toLowerCase();
+  link.addEventListener("click", function (event) {
+    const pageName = pageNameFromLink(this);
+    if (!pageName) return;
 
-    pages.forEach((page) => {
-      const target = page.dataset.page.trim().toLowerCase();
-      if (target === clicked) {
-        page.classList.add("active");
-      } else {
-        page.classList.remove("active");
-      }
-    });
-
-    navigationLinks.forEach((lnk) => {
-      const linkText = lnk.innerText.trim().toLowerCase();
-      if (linkText === clicked) {
-        lnk.classList.add("active");
-      } else {
-        lnk.classList.remove("active");
-      }
-    });
-
-    // Scroll to top of the page after navigating
-    window.scrollTo(0, 0);
+    event.preventDefault();
+    activatePage(pageName);
   });
 });
+
+window.addEventListener("popstate", () => {
+  activatePage(pageNameFromPath(window.location.pathname), { push: false });
+});
+
+activatePage(pageNameFromPath(window.location.pathname), { push: false, scroll: false });
 
 // theme toggle button
 const themeToggleBtn = document.querySelector("[data-theme-toggle]");
@@ -265,17 +297,6 @@ if (themeToggleBtn) {
       "Research & Prototyping": { type: "quote", label: "Request Quote" }
     };
 
-    const paymentMethodLabels = [
-      "Visa",
-      "Mastercard",
-      "Verve",
-      "Bank Transfer",
-      "Pay with Bank",
-      "USSD",
-      "QR",
-      "Mobile Money"
-    ];
-
     if (currencySelect) {
       const storedCurrency = localStorage.getItem("serviceCurrency");
       currencySelect.value = storedCurrency || "NGN";
@@ -297,12 +318,11 @@ if (themeToggleBtn) {
       panel.className = "paystack-trust-panel";
       panel.innerHTML = `
         <div class="paystack-trust-copy">
-          <span class="paystack-kicker">Secure payments via Paystack</span>
-          <p>Book fixed sessions through Paystack checkout, or contact me first for custom project scopes.</p>
-          <p class="paystack-currency-note" data-payment-currency-note></p>
-        </div>
-        <div class="paystack-methods" aria-label="Paystack payment methods">
-          ${paymentMethodLabels.map((label) => `<span class="paystack-method">${label}</span>`).join("")}
+          <span class="paystack-kicker">
+            <span class="paystack-mark">Paystack</span>
+            Secure checkout for fixed sessions
+          </span>
+          <p>Prefer to discuss the scope first? Send a quick enquiry through the contact form.</p>
         </div>
         <button class="paystack-contact-link" type="button" data-general-contact>
           Ask a Question
@@ -313,22 +333,11 @@ if (themeToggleBtn) {
     }
 
     function navigateToContact(message) {
-      const onContactRoute = /\/contact\/?$/.test(window.location.pathname) || /\/contact\.html$/.test(window.location.pathname);
       const contactPage = Array.from(pages).find((page) => page.dataset.page === "contact");
       const messageField = document.querySelector("textarea[name='message']");
 
-      if (!onContactRoute) {
-        sessionStorage.setItem("pendingContactMessage", message);
-        window.location.href = "/contact/";
-        return;
-      }
-
       if (contactPage && pages.length) {
-        pages.forEach((page) => page.classList.toggle("active", page === contactPage));
-        document.querySelectorAll(".navbar-link").forEach((link) => {
-          link.classList.toggle("active", link.textContent.trim().toLowerCase() === "contact");
-        });
-        window.scrollTo(0, 0);
+        activatePage("contact");
       } else if (!messageField) {
         sessionStorage.setItem("pendingContactMessage", message);
         window.location.href = "/contact/";
@@ -370,24 +379,6 @@ if (themeToggleBtn) {
       }
     }
 
-    function updatePaymentCurrencyNote() {
-      const note = document.querySelector("[data-payment-currency-note]");
-      if (!note) return;
-
-      const selected = getSelectedCurrency();
-      const hasDirectLink = Object.values(serviceActions).some((action) => {
-        return action.type === "payment" && action.links && action.links[selected];
-      });
-
-      if (hasDirectLink) {
-        note.textContent = `${selected} checkout is available for fixed sessions.`;
-      } else if (selected === "NGN") {
-        note.textContent = "NGN checkout is ready now. International cards may be accepted by Paystack where enabled.";
-      } else {
-        note.textContent = `${selected} prices are estimates for now. Checkout currently runs through NGN Paystack links until this currency is activated.`;
-      }
-    }
-
     function updateServiceButtonStates() {
       const selected = getSelectedCurrency();
       document.querySelectorAll(".service-contact-btn").forEach((btn) => {
@@ -407,8 +398,6 @@ if (themeToggleBtn) {
             : `Request a quote for ${serviceName}`
         );
       });
-
-      updatePaymentCurrencyNote();
     }
 
     async function getRate(currency) {
@@ -471,6 +460,14 @@ if (themeToggleBtn) {
       return 1;
     }
 
+    function roundLargeDisplayPrice(value) {
+      if (!Number.isFinite(value) || value < 1000) return Math.round(value);
+
+      const magnitude = Math.pow(10, Math.floor(Math.log10(value)));
+      const twoDigitFactor = magnitude / 10;
+      return Math.floor(value / twoDigitFactor) * twoDigitFactor;
+    }
+
     async function updatePrices() {
       const selected = currencySelect ? currencySelect.value : "USD";
       const rate = await getRate(selected);
@@ -482,8 +479,8 @@ if (themeToggleBtn) {
         let displayMax = max;
         // convert if not USD
         if (selected !== "USD") {
-          displayMin = Math.round(min * rate);
-          displayMax = Math.round(max * rate);
+          displayMin = roundLargeDisplayPrice(min * rate);
+          displayMax = roundLargeDisplayPrice(max * rate);
         }
         const symbol = symbols[selected] || "";
         const suffix = billing === "hourly" ? "/hr" : "";
