@@ -91,7 +91,7 @@ Product Manager
 
 alt = ML Teammate
 ML Teammate
-“Pairing with David always leaves you with new insights. He explains complex concepts simply and builds solutions that scale.”
+“Pairing with David always leaves you with new insights. He explains raw concepts simply and builds solutions that scale.”
 
 
 
@@ -133,7 +133,7 @@ Machine Learning Engineer / Data Engineer — AXA Mansard
 – Containerised and deployed services using Docker, Azure, and CI/CD pipelines.
 – Supported analytics dashboards and automated reporting systems.
 
-ML Engineer / AI Pipeline Engineer — ExamRocket
+AI Engineer / AI Pipeline Engineer — ExamRocket
 2025
 – Improved inference speed and stability of speech/text grading pipelines.
 – Designed scoring logic combining ML models with rule-based systems.
@@ -218,7 +218,7 @@ alt = Opportunity Cost of Knowledge
 AI & Career
 2024
 Opportunity Cost of Knowledge in AI
-Thoughts on intentional learning, depth vs breadth, and staying relevant as an ML engineer.
+Thoughts on intentional learning, depth vs breadth, and staying relevant as an AI Engineer.
 
 alt = MLOps journey
 MLOps

@@ -1057,6 +1057,78 @@ body.light-theme .skill-name {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23aaaaaa'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
 }
 
+.paystack-trust-panel {
+  display: grid;
+  grid-template-columns: 1.25fr 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--brown-border);
+  border-radius: 8px;
+  background: var(--brown-elevated);
+  box-shadow: var(--shadow-1);
+}
+
+.paystack-trust-copy p {
+  color: var(--light-gray);
+  font-size: var(--fs-7);
+  line-height: 1.5;
+  margin-top: 0.35rem;
+}
+
+.paystack-kicker {
+  display: inline-flex;
+  align-items: center;
+  color: var(--blue-primary-soft);
+  font-size: var(--fs-6);
+  font-weight: var(--fw-600);
+}
+
+.paystack-currency-note {
+  color: var(--accent-gold) !important;
+}
+
+.paystack-methods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.paystack-method {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0.3rem 0.55rem;
+  border: 1px solid var(--brown-border);
+  border-radius: 6px;
+  color: var(--white-2);
+  background: rgba(255, 255, 255, 0.04);
+  font-size: var(--fs-8);
+  font-weight: var(--fw-500);
+  white-space: nowrap;
+}
+
+.paystack-contact-link {
+  min-height: 38px;
+  padding: 0.45rem 0.8rem;
+  border: 1px solid var(--blue-primary);
+  border-radius: 8px;
+  color: var(--blue-primary-soft);
+  background: transparent;
+  font-size: var(--fs-7);
+  font-weight: var(--fw-600);
+  cursor: pointer;
+  transition: background var(--transition-1), color var(--transition-1), transform var(--transition-1);
+}
+
+.paystack-contact-link:hover,
+.paystack-contact-link:focus {
+  color: var(--white-1);
+  background: var(--blue-primary);
+  transform: translateY(-1px);
+}
+
 /* Style select options for better visibility in both themes */
 .services-section #currency-select option {
   background: var(--brown-elevated);
@@ -1074,6 +1146,32 @@ body.light-theme .services-section #currency-select {
   /* Use a darker arrow in light mode for contrast */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%23333333'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 011.08 1.04l-4.25 4.25a.75.75 0 01-1.08 0L5.21 8.27a.75.75 0 01.02-1.06z' clip-rule='evenodd'/%3E%3C/svg%3E");
 }
+body.light-theme .paystack-trust-panel {
+  background: #ffffff;
+  border-color: #d1d5db;
+}
+
+body.light-theme .paystack-trust-copy p {
+  color: var(--brown-700);
+}
+
+body.light-theme .paystack-method {
+  color: var(--brown-800);
+  background: #f8fafc;
+  border-color: #d1d5db;
+}
+
+body.light-theme .paystack-contact-link {
+  color: var(--blue-primary);
+  background: #ffffff;
+}
+
+body.light-theme .paystack-contact-link:hover,
+body.light-theme .paystack-contact-link:focus {
+  color: #ffffff;
+  background: var(--blue-primary);
+}
+
 .services-page .service-card {
   background-color: var(--brown-elevated);
   border: 1px solid var(--brown-border);
@@ -1113,7 +1211,7 @@ body.light-theme .services-section #currency-select {
 }
 
 /*
-  Style the "Contact Me" buttons within service cards.  These appear at the
+  Style the service action buttons within service cards.  These appear at the
   bottom of each card and should look interactive rather than plain text.
 */
 .service-contact-btn {
@@ -1134,12 +1232,47 @@ body.light-theme .services-section #currency-select {
   background: var(--accent-gold);
   transform: translateY(-2px);
 }
+.service-contact-btn.is-quote {
+  color: var(--blue-primary-soft);
+  background: transparent;
+  border: 1px solid var(--blue-primary);
+}
+
+.service-contact-btn.is-quote:hover,
+.service-contact-btn.is-quote:focus {
+  color: var(--white-1);
+  background: var(--blue-primary);
+}
 body.light-theme .service-contact-btn {
   background: var(--blue-primary);
   color: #ffffff;
 }
 body.light-theme .service-contact-btn:hover {
   background: var(--accent-gold);
+}
+body.light-theme .service-contact-btn.is-quote {
+  color: var(--blue-primary);
+  background: #ffffff;
+}
+
+body.light-theme .service-contact-btn.is-quote:hover,
+body.light-theme .service-contact-btn.is-quote:focus {
+  color: #ffffff;
+  background: var(--blue-primary);
+}
+
+.form-error.form-success {
+  color: #22c55e;
+}
+
+@media (max-width: 900px) {
+  .paystack-trust-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .paystack-contact-link {
+    width: 100%;
+  }
 }
 
 

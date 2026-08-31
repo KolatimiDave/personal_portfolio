@@ -3,7 +3,9 @@
 
 
 // element toggle function
-const elementToggleFunc = function (elem) { elem.classList.toggle("active"); }
+const elementToggleFunc = function (elem) {
+  if (elem) elem.classList.toggle("active");
+}
 
 
 
@@ -12,7 +14,9 @@ const sidebar = document.querySelector("[data-sidebar]");
 const sidebarBtn = document.querySelector("[data-sidebar-btn]");
 
 // sidebar toggle functionality for mobile
-sidebarBtn.addEventListener("click", function () { elementToggleFunc(sidebar); });
+if (sidebarBtn && sidebar) {
+  sidebarBtn.addEventListener("click", function () { elementToggleFunc(sidebar); });
+}
 
 
 
@@ -29,8 +33,8 @@ const modalText = document.querySelector("[data-modal-text]");
 
 // modal toggle function
 const testimonialsModalFunc = function () {
-  modalContainer.classList.toggle("active");
-  overlay.classList.toggle("active");
+  if (modalContainer) modalContainer.classList.toggle("active");
+  if (overlay) overlay.classList.toggle("active");
 }
 
 // add click event to all modal items
@@ -38,10 +42,16 @@ for (let i = 0; i < testimonialsItem.length; i++) {
 
   testimonialsItem[i].addEventListener("click", function () {
 
-    modalImg.src = this.querySelector("[data-testimonials-avatar]").src;
-    modalImg.alt = this.querySelector("[data-testimonials-avatar]").alt;
-    modalTitle.innerHTML = this.querySelector("[data-testimonials-title]").innerHTML;
-    modalText.innerHTML = this.querySelector("[data-testimonials-text]").innerHTML;
+    const avatar = this.querySelector("[data-testimonials-avatar]");
+    const title = this.querySelector("[data-testimonials-title]");
+    const text = this.querySelector("[data-testimonials-text]");
+
+    if (modalImg && avatar) {
+      modalImg.src = avatar.src;
+      modalImg.alt = avatar.alt;
+    }
+    if (modalTitle && title) modalTitle.innerHTML = title.innerHTML;
+    if (modalText && text) modalText.innerHTML = text.innerHTML;
 
     testimonialsModalFunc();
 
@@ -50,8 +60,8 @@ for (let i = 0; i < testimonialsItem.length; i++) {
 }
 
 // add click event to modal close button
-modalCloseBtn.addEventListener("click", testimonialsModalFunc);
-overlay.addEventListener("click", testimonialsModalFunc);
+if (modalCloseBtn) modalCloseBtn.addEventListener("click", testimonialsModalFunc);
+if (overlay) overlay.addEventListener("click", testimonialsModalFunc);
 
 
 
@@ -61,14 +71,16 @@ const selectItems = document.querySelectorAll("[data-select-item]");
 const selectValue = document.querySelector("[data-selecct-value]");
 const filterBtn = document.querySelectorAll("[data-filter-btn]");
 
-select.addEventListener("click", function () { elementToggleFunc(this); });
+if (select) {
+  select.addEventListener("click", function () { elementToggleFunc(this); });
+}
 
 // add event in all select items
 for (let i = 0; i < selectItems.length; i++) {
   selectItems[i].addEventListener("click", function () {
 
     let selectedValue = this.innerText.toLowerCase();
-    selectValue.innerText = this.innerText;
+    if (selectValue) selectValue.innerText = this.innerText;
     elementToggleFunc(select);
     filterFunc(selectedValue);
 
@@ -95,17 +107,17 @@ const filterFunc = function (selectedValue) {
 }
 
 // add event in all filter button items for large screen
-let lastClickedBtn = filterBtn[0];
+let lastClickedBtn = filterBtn[0] || null;
 
 for (let i = 0; i < filterBtn.length; i++) {
 
   filterBtn[i].addEventListener("click", function () {
 
     let selectedValue = this.innerText.toLowerCase();
-    selectValue.innerText = this.innerText;
+    if (selectValue) selectValue.innerText = this.innerText;
     filterFunc(selectedValue);
 
-    lastClickedBtn.classList.remove("active");
+    if (lastClickedBtn) lastClickedBtn.classList.remove("active");
     this.classList.add("active");
     lastClickedBtn = this;
 
@@ -209,7 +221,188 @@ if (themeToggleBtn) {
     const priceElements = document.querySelectorAll(".service-card-price");
     // Cache exchange rates to avoid redundant requests
     const rateCache = { USD: 1 };
-    const symbols = { USD: "$", NGN: "₦", EUR: "€", GBP: "£", JPY: "¥" };
+    const symbols = { USD: "$", NGN: "\u20a6", EUR: "\u20ac", GBP: "\u00a3", JPY: "\u00a5" };
+
+    const serviceActions = {
+      "AI Consulting": {
+        type: "payment",
+        label: "Book Now",
+        links: {
+          NGN: "https://paystack.shop/pay/davidolukolatimi-consulatancy",
+          USD: "",
+          EUR: "",
+          GBP: "",
+          JPY: ""
+        }
+      },
+      "Tutoring & Training": {
+        type: "payment",
+        label: "Book Now",
+        links: {
+          NGN: "https://paystack.shop/pay/davidolukolatimi-tutor",
+          USD: "",
+          EUR: "",
+          GBP: "",
+          JPY: ""
+        }
+      },
+      "Code Review & Mentorship": {
+        type: "payment",
+        label: "Book Now",
+        links: {
+          NGN: "https://paystack.shop/pay/davidolukolatimi-code_review",
+          USD: "",
+          EUR: "",
+          GBP: "",
+          JPY: ""
+        }
+      },
+      "Custom ML Development": { type: "quote", label: "Request Quote" },
+      "Data Pipelines & ETL": { type: "quote", label: "Request Quote" },
+      "MLOps & Deployment": { type: "quote", label: "Request Quote" },
+      "Technical Writing": { type: "quote", label: "Request Quote" },
+      "Dashboards & Visualisation": { type: "quote", label: "Request Quote" },
+      "Research & Prototyping": { type: "quote", label: "Request Quote" }
+    };
+
+    const paymentMethodLabels = [
+      "Visa",
+      "Mastercard",
+      "Verve",
+      "Bank Transfer",
+      "Pay with Bank",
+      "USSD",
+      "QR",
+      "Mobile Money"
+    ];
+
+    if (currencySelect) {
+      const storedCurrency = localStorage.getItem("serviceCurrency");
+      currencySelect.value = storedCurrency || "NGN";
+    }
+
+    function getSelectedCurrency() {
+      return currencySelect ? currencySelect.value : "NGN";
+    }
+
+    function createPaystackTrustPanel() {
+      const servicesSection = document.querySelector(".services-section");
+      const currencySelector = document.querySelector(".currency-selector");
+
+      if (!servicesSection || !currencySelector || document.querySelector(".paystack-trust-panel")) {
+        return;
+      }
+
+      const panel = document.createElement("div");
+      panel.className = "paystack-trust-panel";
+      panel.innerHTML = `
+        <div class="paystack-trust-copy">
+          <span class="paystack-kicker">Secure payments via Paystack</span>
+          <p>Book fixed sessions through Paystack checkout, or contact me first for custom project scopes.</p>
+          <p class="paystack-currency-note" data-payment-currency-note></p>
+        </div>
+        <div class="paystack-methods" aria-label="Paystack payment methods">
+          ${paymentMethodLabels.map((label) => `<span class="paystack-method">${label}</span>`).join("")}
+        </div>
+        <button class="paystack-contact-link" type="button" data-general-contact>
+          Ask a Question
+        </button>
+      `;
+
+      currencySelector.insertAdjacentElement("afterend", panel);
+    }
+
+    function navigateToContact(message) {
+      const contactPage = Array.from(pages).find((page) => page.dataset.page === "contact");
+      const messageField = document.querySelector("textarea[name='message']");
+
+      if (contactPage && pages.length) {
+        pages.forEach((page) => page.classList.toggle("active", page === contactPage));
+        document.querySelectorAll(".navbar-link").forEach((link) => {
+          link.classList.toggle("active", link.textContent.trim().toLowerCase() === "contact");
+        });
+        window.scrollTo(0, 0);
+      } else if (!messageField) {
+        sessionStorage.setItem("pendingContactMessage", message);
+        window.location.href = "contact.html";
+        return;
+      }
+
+      setTimeout(() => {
+        const field = document.querySelector("textarea[name='message']");
+        if (field) {
+          field.value = message;
+          field.dispatchEvent(new Event("input", { bubbles: true }));
+          field.focus();
+        }
+      }, 150);
+    }
+
+    function showContactMessage(text, mode = "success") {
+      const messageEl = document.getElementById("contact-error");
+      if (!messageEl) return;
+      messageEl.textContent = text;
+      messageEl.classList.toggle("form-success", mode === "success");
+    }
+
+    function restorePendingContactMessage() {
+      const pending = sessionStorage.getItem("pendingContactMessage");
+      if (!pending) return;
+      sessionStorage.removeItem("pendingContactMessage");
+      const messageField = document.querySelector("textarea[name='message']");
+      if (messageField) {
+        messageField.value = pending;
+        messageField.dispatchEvent(new Event("input", { bubbles: true }));
+      }
+    }
+
+    function displayPaymentReturnMessage() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("payment") === "success") {
+        showContactMessage("Thanks for booking. Your Paystack payment was received; you can add any extra project details here.");
+      }
+    }
+
+    function updatePaymentCurrencyNote() {
+      const note = document.querySelector("[data-payment-currency-note]");
+      if (!note) return;
+
+      const selected = getSelectedCurrency();
+      const hasDirectLink = Object.values(serviceActions).some((action) => {
+        return action.type === "payment" && action.links && action.links[selected];
+      });
+
+      if (hasDirectLink) {
+        note.textContent = `${selected} checkout is available for fixed sessions.`;
+      } else if (selected === "NGN") {
+        note.textContent = "NGN checkout is ready now. International cards may be accepted by Paystack where enabled.";
+      } else {
+        note.textContent = `${selected} prices are estimates for now. Checkout currently runs through NGN Paystack links until this currency is activated.`;
+      }
+    }
+
+    function updateServiceButtonStates() {
+      const selected = getSelectedCurrency();
+      document.querySelectorAll(".service-contact-btn").forEach((btn) => {
+        const serviceName = btn.dataset.service;
+        const action = serviceActions[serviceName] || { type: "quote", label: "Request Quote" };
+        const hasSelectedCurrency = action.type === "payment" && action.links && action.links[selected];
+
+        btn.textContent = action.type === "payment" && !hasSelectedCurrency && selected !== "NGN"
+          ? "Book Now (NGN)"
+          : action.label;
+        btn.classList.toggle("is-payment", action.type === "payment");
+        btn.classList.toggle("is-quote", action.type !== "payment");
+        btn.setAttribute(
+          "aria-label",
+          action.type === "payment"
+            ? `Book ${serviceName} securely with Paystack`
+            : `Request a quote for ${serviceName}`
+        );
+      });
+
+      updatePaymentCurrencyNote();
+    }
 
     async function getRate(currency) {
       // Return 1 for USD (base currency)
@@ -296,7 +489,11 @@ if (themeToggleBtn) {
     }
 
     if (currencySelect) {
-      currencySelect.addEventListener("change", updatePrices);
+      currencySelect.addEventListener("change", function () {
+        localStorage.setItem("serviceCurrency", currencySelect.value);
+        updatePrices();
+        updateServiceButtonStates();
+      });
       // Initialise on page load
       updatePrices();
     }
@@ -611,27 +808,43 @@ if (themeToggleBtn) {
       ]
     };
 
+    function requestQuote(serviceName) {
+      const templates = contactTemplates[serviceName] || [
+        `Hello David, I came across your ${serviceName} service. I would like to discuss the scope, pricing, and next steps.`
+      ];
+      const message = templates[Math.floor(Math.random() * templates.length)];
+      navigateToContact(message);
+    }
+
+    createPaystackTrustPanel();
+    restorePendingContactMessage();
+    displayPaymentReturnMessage();
+    updateServiceButtonStates();
+
+    const generalContactBtn = document.querySelector("[data-general-contact]");
+    if (generalContactBtn) {
+      generalContactBtn.addEventListener("click", () => {
+        navigateToContact("Hello David, I have a question before booking a service through your website.");
+      });
+    }
+
     const serviceButtons = document.querySelectorAll(".service-contact-btn");
     serviceButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
         const serviceName = btn.dataset.service;
-        const templates = contactTemplates[serviceName] || [
-          `Hello David, I came about your ${serviceName} service. I would like to schedule a meeting to discuss this with you.`
-        ];
-        const message = templates[Math.floor(Math.random() * templates.length)];
-        // Navigate to contact page by clicking the nav link with text "contact"
-        navigationLinks.forEach((link) => {
-          if (link.innerText.trim().toLowerCase() === "contact") {
-            link.click();
+        const action = serviceActions[serviceName] || { type: "quote", label: "Request Quote" };
+
+        if (action.type === "payment") {
+          const selectedCurrency = getSelectedCurrency();
+          const paymentUrl = (action.links && (action.links[selectedCurrency] || action.links.NGN)) || "";
+
+          if (paymentUrl) {
+            window.location.href = paymentUrl;
+            return;
           }
-        });
-        // After navigation, prefill the message field
-        setTimeout(() => {
-          const messageField = document.querySelector("textarea[name='message']");
-          if (messageField) messageField.value = message;
-          // Trigger input event so validation updates the send button
-          messageField && messageField.dispatchEvent(new Event('input', { bubbles: true }));
-        }, 300);
+        }
+
+        requestQuote(serviceName);
       });
     });
 
@@ -646,7 +859,10 @@ if (themeToggleBtn) {
           message: contactForm.message.value.trim()
         };
         const errorEl = document.getElementById("contact-error");
-        if (errorEl) errorEl.textContent = "";
+        if (errorEl) {
+          errorEl.textContent = "";
+          errorEl.classList.remove("form-success");
+        }
 
         // Basic validation checks
         if (!payload.name) {
@@ -675,7 +891,10 @@ if (themeToggleBtn) {
           });
           const data = await res.json();
           if (data.ok) {
-            if (errorEl) errorEl.textContent = "Message sent successfully to davidkolatimi@gmail.com ✅";
+            if (errorEl) {
+              errorEl.textContent = "Message sent successfully to davidkolatimi@gmail.com.";
+              errorEl.classList.add("form-success");
+            }
             contactForm.reset();
           } else {
             if (errorEl) errorEl.textContent = data.error || "Failed to send message.";
