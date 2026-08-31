@@ -313,8 +313,15 @@ if (themeToggleBtn) {
     }
 
     function navigateToContact(message) {
+      const onContactRoute = /\/contact\/?$/.test(window.location.pathname) || /\/contact\.html$/.test(window.location.pathname);
       const contactPage = Array.from(pages).find((page) => page.dataset.page === "contact");
       const messageField = document.querySelector("textarea[name='message']");
+
+      if (!onContactRoute) {
+        sessionStorage.setItem("pendingContactMessage", message);
+        window.location.href = "/contact/";
+        return;
+      }
 
       if (contactPage && pages.length) {
         pages.forEach((page) => page.classList.toggle("active", page === contactPage));
@@ -324,7 +331,7 @@ if (themeToggleBtn) {
         window.scrollTo(0, 0);
       } else if (!messageField) {
         sessionStorage.setItem("pendingContactMessage", message);
-        window.location.href = "contact.html";
+        window.location.href = "/contact/";
         return;
       }
 
