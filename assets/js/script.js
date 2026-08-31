@@ -320,7 +320,7 @@ if (themeToggleBtn) {
         <div class="paystack-trust-copy">
           <span class="paystack-kicker">
             <span class="paystack-mark">Paystack</span>
-            Secure checkout for fixed sessions
+            <span class="paystack-kicker-text">Secure checkout for fixed sessions</span>
           </span>
           <p>Prefer to discuss the scope first? Send a quick enquiry through the contact form.</p>
         </div>

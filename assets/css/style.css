@@ -1081,9 +1081,12 @@ body.light-theme .skill-name {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--blue-primary-soft);
   font-size: var(--fs-6);
   font-weight: var(--fw-600);
+}
+
+.paystack-kicker-text {
+  color: var(--white-2);
 }
 
 .paystack-mark {
@@ -1103,10 +1106,10 @@ body.light-theme .skill-name {
 .paystack-contact-link {
   min-height: 38px;
   padding: 0.45rem 0.8rem;
-  border: 1px solid var(--blue-primary);
+  border: 1px solid var(--blue-primary-soft);
   border-radius: 8px;
-  color: var(--blue-primary-soft);
-  background: transparent;
+  color: #ffffff;
+  background: rgba(51, 102, 255, 0.24);
   font-size: var(--fs-7);
   font-weight: var(--fw-600);
   cursor: pointer;
@@ -1146,9 +1149,14 @@ body.light-theme .paystack-trust-copy p {
   color: var(--brown-700);
 }
 
+body.light-theme .paystack-kicker-text {
+  color: var(--brown-900);
+}
+
 body.light-theme .paystack-contact-link {
-  color: var(--blue-primary);
-  background: #ffffff;
+  color: #ffffff;
+  background: var(--blue-primary);
+  border-color: var(--blue-primary);
 }
 
 body.light-theme .paystack-contact-link:hover,
@@ -1218,9 +1226,9 @@ body.light-theme .paystack-contact-link:focus {
   transform: translateY(-2px);
 }
 .service-contact-btn.is-quote {
-  color: var(--blue-primary-soft);
-  background: transparent;
-  border: 1px solid var(--blue-primary);
+  color: #ffffff;
+  background: rgba(51, 102, 255, 0.24);
+  border: 1px solid var(--blue-primary-soft);
 }
 
 .service-contact-btn.is-quote:hover,
