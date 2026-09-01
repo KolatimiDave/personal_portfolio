@@ -178,6 +178,18 @@ function pageNameFromLink(link) {
   }
 }
 
+function scrollToHash(hash, options = {}) {
+  if (!hash) return;
+
+  const target = document.getElementById(decodeURIComponent(hash.replace(/^#/, "")));
+  if (!target) return;
+
+  target.scrollIntoView({
+    behavior: options.behavior || "smooth",
+    block: "start"
+  });
+}
+
 function activatePage(pageName, options = {}) {
   if (!pageRoutes[pageName]) return;
 
@@ -190,11 +202,16 @@ function activatePage(pageName, options = {}) {
   });
 
   const targetPath = options.path || pageRoutes[pageName];
-  if (options.push !== false && window.location.pathname !== targetPath) {
-    history.pushState({ page: pageName }, "", targetPath);
+  const targetUrl = `${targetPath}${options.hash || ""}`;
+  if (options.push !== false && `${window.location.pathname}${window.location.hash}` !== targetUrl) {
+    history.pushState({ page: pageName }, "", targetUrl);
   }
 
-  if (options.scroll !== false) window.scrollTo(0, 0);
+  if (options.hash) {
+    setTimeout(() => scrollToHash(options.hash), 0);
+  } else if (options.scroll !== false) {
+    window.scrollTo(0, 0);
+  }
 }
 
 function updateDocumentHead(incomingDoc) {
@@ -239,13 +256,21 @@ async function fetchRouteDocument(path) {
   return doc;
 }
 
-async function navigateToRoute(pageName, path) {
-  const targetPath = path || pageRoutes[pageName];
+async function navigateToRoute(pageName, href) {
+  const target = new URL(href || pageRoutes[pageName], window.location.origin);
+  const targetPath = target.pathname;
+  const targetHash = target.hash;
   const mainContent = document.querySelector(".main-content");
   const simpleSwapPages = new Set(["home", "experience"]);
 
+  if (targetPath === window.location.pathname && targetHash) {
+    history.pushState({ page: pageName }, "", `${targetPath}${targetHash}`);
+    scrollToHash(targetHash);
+    return;
+  }
+
   if (!mainContent || !simpleSwapPages.has(pageName)) {
-    window.location.href = targetPath;
+    window.location.href = `${targetPath}${targetHash}`;
     return;
   }
 
@@ -255,16 +280,16 @@ async function navigateToRoute(pageName, path) {
     const currentArticle = mainContent.querySelector("[data-page]");
 
     if (!incomingArticle || !currentArticle) {
-      window.location.href = targetPath;
+      window.location.href = `${targetPath}${targetHash}`;
       return;
     }
 
     currentArticle.replaceWith(incomingArticle.cloneNode(true));
     pages = document.querySelectorAll("[data-page]");
     updateDocumentHead(incomingDoc);
-    activatePage(pageName, { path: targetPath });
+    activatePage(pageName, { path: targetPath, hash: targetHash });
   } catch (err) {
-    window.location.href = targetPath;
+    window.location.href = `${targetPath}${targetHash}`;
   }
 }
 
@@ -285,10 +310,13 @@ navigationLinks.forEach((link) => {
 });
 
 window.addEventListener("popstate", () => {
-  activatePage(pageNameFromPath(window.location.pathname), { push: false });
+  activatePage(pageNameFromPath(window.location.pathname), { push: false, hash: window.location.hash });
 });
 
 activatePage(pageNameFromPath(window.location.pathname), { push: false, scroll: false });
+if (window.location.hash) {
+  setTimeout(() => scrollToHash(window.location.hash, { behavior: "auto" }), 0);
+}
 
 // theme toggle button
 const themeToggleBtn = document.querySelector("[data-theme-toggle]");

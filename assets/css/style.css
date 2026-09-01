@@ -1982,6 +1982,11 @@ body:not(.light-theme) .hamoye-logo-link {
   position: relative;
 }
 
+.timeline-item[id],
+.project-item[id] {
+  scroll-margin-top: 120px;
+}
+
 .timeline-item:not(:last-child) {
   margin-bottom: 20px;
 }
