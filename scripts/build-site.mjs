@@ -252,7 +252,7 @@ function cleanHtml(html) {
   let cleaned = stripInternalComments(html)
     .replace(/<div data-modal-text>\s*<p>\s*Modal text is loaded dynamically from the testimonial cards\s*above via script\.js\. You can customize the text, role, and\s*dates for each testimonial as needed\.\s*<\/p>\s*<\/div>/g, "<div data-modal-text></div>")
     .replace(/data-selecct-value/g, "data-select-value")
-    .replace(/<script src="\/assets\/js\/script\.js\?v=\d+"><\/script>/g, '<script src="/assets/js/script.js?v=4"></script>')
+    .replace(/<script src="\/assets\/js\/script\.js\?v=\d+"><\/script>/g, '<script src="/assets/js/script.js?v=5"></script>')
     .replace(/[ \t]+$/gm, "")
     .replace(/\n{3,}/g, "\n\n");
 

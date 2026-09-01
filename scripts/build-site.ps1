@@ -187,7 +187,7 @@ foreach ($navRoute in $routes) {
   $html = Keep-OnlyRouteArticle $html $Route.name
   $html = [regex]::Replace($html, "<!--([\s\S]*?)-->", "")
   $html = $html.Replace("data-selecct-value", "data-select-value")
-  $html = [regex]::Replace($html, '<script src="/assets/js/script\.js\?v=\d+"></script>', '<script src="/assets/js/script.js?v=4"></script>')
+  $html = [regex]::Replace($html, '<script src="/assets/js/script\.js\?v=\d+"></script>', '<script src="/assets/js/script.js?v=5"></script>')
   $optimizedImages = @{
     "/assets/images/blog-life.png" = "/assets/images/optimized/blog-life.webp"
     "/assets/images/blog-marathon-simple.png" = "/assets/images/optimized/blog-marathon-simple.webp"

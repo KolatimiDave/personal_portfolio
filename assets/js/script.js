@@ -331,8 +331,7 @@ if (themeToggleBtn) {
  */
 
 (() => {
-  // Only run after DOM has loaded
-  document.addEventListener("DOMContentLoaded", function () {
+  function initPageWidgets() {
     // Currency conversion
     const currencySelect = document.getElementById("currency-select");
     const priceElements = document.querySelectorAll(".service-card-price");
@@ -944,7 +943,13 @@ if (themeToggleBtn) {
       const projects = Array.from(projectList.children);
       projects.reverse().forEach((item) => projectList.appendChild(item));
     }
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initPageWidgets);
+  } else {
+    initPageWidgets();
+  }
 })();
 
 

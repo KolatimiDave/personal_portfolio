@@ -1330,10 +1330,15 @@ body.light-theme .navbar-link::after {
   transition: width var(--transition-1);
 }
 
-.navbar-link:hover,
-.navbar-link:focus {
+body.light-theme .navbar-link:hover,
+body.light-theme .navbar-link:focus {
   color: var(--blue-primary-soft);
   transform: translateY(-1px);
+}
+
+body:not(.light-theme) .navbar-link:hover,
+body:not(.light-theme) .navbar-link:focus {
+  color: var(--light-gray);
 }
 
 .navbar-link:hover::after,
