@@ -140,7 +140,7 @@ const formBtn = document.querySelector("[data-form-btn]");
 
 // page navigation variables
 const navigationLinks = document.querySelectorAll(".navbar-link");
-const pages = document.querySelectorAll("[data-page]");
+let pages = document.querySelectorAll("[data-page]");
 const pageRoutes = {
   home: "/",
   experience: "/experience/",
@@ -149,13 +149,7 @@ const pageRoutes = {
   services: "/services/",
   contact: "/contact/"
 };
-const routeAliases = {
-  "/home/": "home",
-  "/about/": "home",
-  "/resume/": "experience",
-  "/portfolio/": "projects-research",
-  "/blog/": "writing"
-};
+const routeCache = new Map();
 const pageLabels = {
   home: "home",
   experience: "experience",
@@ -168,7 +162,6 @@ const pageLabels = {
 function pageNameFromPath(pathname) {
   const cleanPath = pathname.replace(/\/index\.html$/, "/");
   if (cleanPath === "/") return "home";
-  if (routeAliases[cleanPath]) return routeAliases[cleanPath];
   const match = cleanPath.match(/^\/(home|experience|projects-research|writing|services|contact)\/?$/);
   return match ? match[1] : "home";
 }
@@ -204,6 +197,77 @@ function activatePage(pageName, options = {}) {
   if (options.scroll !== false) window.scrollTo(0, 0);
 }
 
+function updateDocumentHead(incomingDoc) {
+  document.title = incomingDoc.title;
+
+  const selectors = [
+    'meta[name="description"]',
+    'meta[property="og:title"]',
+    'meta[property="og:description"]',
+    'meta[property="og:url"]',
+    'meta[property="og:image"]',
+    'meta[name="twitter:title"]',
+    'meta[name="twitter:description"]',
+    'meta[name="twitter:image"]',
+    'link[rel="canonical"]',
+    'script[type="application/ld+json"]'
+  ];
+
+  selectors.forEach((selector) => {
+    const current = document.head.querySelector(selector);
+    const incoming = incomingDoc.head.querySelector(selector);
+    if (!incoming) return;
+    if (current) {
+      current.replaceWith(incoming.cloneNode(true));
+    } else {
+      document.head.appendChild(incoming.cloneNode(true));
+    }
+  });
+}
+
+async function fetchRouteDocument(path) {
+  if (routeCache.has(path)) return routeCache.get(path);
+
+  const response = await fetch(path, {
+    headers: { "X-Requested-With": "fetch" }
+  });
+  if (!response.ok) throw new Error(`Failed to load ${path}`);
+
+  const html = await response.text();
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  routeCache.set(path, doc);
+  return doc;
+}
+
+async function navigateToRoute(pageName, path) {
+  const targetPath = path || pageRoutes[pageName];
+  const mainContent = document.querySelector(".main-content");
+  const simpleSwapPages = new Set(["home", "experience"]);
+
+  if (!mainContent || !simpleSwapPages.has(pageName)) {
+    window.location.href = targetPath;
+    return;
+  }
+
+  try {
+    const incomingDoc = await fetchRouteDocument(targetPath);
+    const incomingArticle = incomingDoc.querySelector(`[data-page="${pageName}"]`);
+    const currentArticle = mainContent.querySelector("[data-page]");
+
+    if (!incomingArticle || !currentArticle) {
+      window.location.href = targetPath;
+      return;
+    }
+
+    currentArticle.replaceWith(incomingArticle.cloneNode(true));
+    pages = document.querySelectorAll("[data-page]");
+    updateDocumentHead(incomingDoc);
+    activatePage(pageName, { path: targetPath });
+  } catch (err) {
+    window.location.href = targetPath;
+  }
+}
+
 /*
   Improved navigation logic: rather than relying on positional indexing of
   navigation links and pages (which can break if new pages are inserted),
@@ -216,7 +280,7 @@ navigationLinks.forEach((link) => {
     if (!pageName) return;
 
     event.preventDefault();
-    activatePage(pageName);
+    navigateToRoute(pageName, this.getAttribute("href"));
   });
 });
 

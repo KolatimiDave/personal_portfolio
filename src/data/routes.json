@@ -3,7 +3,7 @@
     "name": "home",
     "label": "Home",
     "url": "/",
-    "title": "David Olukolatimi | Data Scientist & Machine Learning Engineer",
+    "title": "David Olukolatimi | Machine Learning Engineer & Data Scientist",
     "description": "David Olukolatimi is a Data Scientist and Machine Learning Engineer building production machine learning, AI, and data systems across insurance, education technology, client delivery, and applied research.",
     "priority": "1.0",
     "changefreq": "monthly"
@@ -12,8 +12,8 @@
     "name": "experience",
     "label": "Experience",
     "url": "/experience/",
-    "title": "Experience - David Olukolatimi",
-    "description": "Professional experience across production machine learning, data engineering, AI systems, insurance analytics, education technology, and client delivery.",
+    "title": "Machine Learning Engineer Experience - David Olukolatimi",
+    "description": "Machine learning engineering and data science experience across production ML, data engineering, AI systems, insurance analytics, education technology, and client delivery.",
     "priority": "0.9",
     "changefreq": "monthly"
   },
@@ -21,8 +21,8 @@
     "name": "projects-research",
     "label": "Projects & Research",
     "url": "/projects-research/",
-    "title": "Projects & Research - David Olukolatimi",
-    "description": "Selected machine learning projects, published research, competition work, and GitHub repositories by David Olukolatimi.",
+    "title": "Machine Learning Projects & AI Research - David Olukolatimi",
+    "description": "Selected machine learning projects, AI research, published papers, competition work, and GitHub repositories by David Olukolatimi.",
     "priority": "0.8",
     "changefreq": "monthly"
   },
@@ -30,8 +30,8 @@
     "name": "writing",
     "label": "Writing",
     "url": "/writing/",
-    "title": "Writing - David Olukolatimi",
-    "description": "Articles by David Olukolatimi on artificial intelligence, engineering, career growth, learning, work, and personal development.",
+    "title": "AI, Data Science & Career Writing - David Olukolatimi",
+    "description": "Articles by David Olukolatimi on artificial intelligence, data science, engineering, career growth, learning, work, and personal development.",
     "priority": "0.7",
     "changefreq": "weekly"
   },
@@ -39,8 +39,8 @@
     "name": "services",
     "label": "Services",
     "url": "/services/",
-    "title": "Services - David Olukolatimi",
-    "description": "AI consulting, machine learning development, data pipelines, MLOps, technical writing, training, and mentorship services.",
+    "title": "AI Consulting, MLOps & Data Science Services - David Olukolatimi",
+    "description": "AI consulting, machine learning development, data pipelines, MLOps, technical writing, training, dashboards, research, and mentorship services.",
     "priority": "0.8",
     "changefreq": "monthly"
   },
@@ -48,8 +48,8 @@
     "name": "contact",
     "label": "Contact Me",
     "url": "/contact/",
-    "title": "Contact Me - David Olukolatimi",
-    "description": "Contact David Olukolatimi for roles, projects, collaborations, research ideas, training requests, and technical problems.",
+    "title": "Contact David Olukolatimi - Machine Learning Engineer",
+    "description": "Contact David Olukolatimi for machine learning engineering roles, AI projects, data science collaborations, research ideas, training requests, and technical problems.",
     "priority": "0.7",
     "changefreq": "yearly"
   }

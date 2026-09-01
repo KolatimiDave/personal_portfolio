@@ -25,7 +25,7 @@ async function collectHtmlFiles(dir = root) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       files.push(...await collectHtmlFiles(fullPath));
-    } else if (entry.name.endsWith(".html")) {
+    } else if (entry.name.endsWith(".html") && !fullPath.includes(`${path.sep}src${path.sep}`)) {
       files.push(fullPath);
     }
   }
@@ -36,6 +36,12 @@ async function collectHtmlFiles(dir = root) {
 for (const route of routes) {
   const file = route.url === "/" ? "index.html" : `${route.name}/index.html`;
   if (!await exists(file)) failures.push(`Missing generated route: ${file}`);
+}
+
+for (const legacyRoute of ["about", "resume", "portfolio", "blog"]) {
+  if (await exists(`${legacyRoute}/index.html`) || await exists(`${legacyRoute}.html`)) {
+    failures.push(`Removed legacy route still exists: ${legacyRoute}`);
+  }
 }
 
 for (const file of await collectHtmlFiles()) {
@@ -53,6 +59,11 @@ for (const file of await collectHtmlFiles()) {
   if (!/<meta property="og:image"/i.test(html)) {
     failures.push(`Missing Open Graph image in ${relative}`);
   }
+
+  const h1Count = (html.match(/<h1\b/gi) || []).length;
+  const articleCount = (html.match(/<article\b/gi) || []).length;
+  if (h1Count !== 1) failures.push(`Expected exactly one h1 in ${relative}, found ${h1Count}`);
+  if (articleCount !== 1) failures.push(`Expected exactly one article in ${relative}, found ${articleCount}`);
 
   const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((match) => match[1]);
   const duplicateIds = ids.filter((id, index) => ids.indexOf(id) !== index);

@@ -12,19 +12,18 @@ Contact Me
 # current routes
 
 /
-/home/
 /experience/
 /projects-research/
 /writing/
 /services/
 /contact/
 
-# compatibility routes
+# legacy redirects
 
-/about/ -> Home
-/resume/ -> Experience
-/portfolio/ -> Projects & Research
-/blog/ -> Writing
+/about/ -> /
+/resume/ -> /experience/
+/portfolio/ -> /projects-research/
+/blog/ -> /writing/
 
 # homepage focus
 

@@ -5,21 +5,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 HTML_FILES = [
     ROOT / "index.html",
-    ROOT / "home.html",
     *ROOT.glob("*.html"),
     *(
         ROOT / name / "index.html"
         for name in [
-            "home",
             "experience",
             "projects-research",
             "writing",
             "services",
             "contact",
-            "about",
-            "resume",
-            "portfolio",
-            "blog",
         ]
     ),
 ]

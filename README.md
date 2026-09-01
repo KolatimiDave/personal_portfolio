@@ -39,7 +39,6 @@ The site stays intentionally lightweight: generated static HTML, shared CSS, van
       routes.json
       site.json
   index.html
-  home/
   experience/
   projects-research/
   writing/
@@ -117,16 +116,15 @@ Keep frontend domains aligned with the backend CORS allowlist in `backend/main.p
 Primary public routes:
 
 - `/`
-- `/home/`
 - `/experience/`
 - `/projects-research/`
 - `/writing/`
 - `/services/`
 - `/contact/`
 
-Compatibility routes are generated for older links:
+Older links should be redirected at the host level when supported:
 
-- `/about/` points to Home
-- `/resume/` points to Experience
-- `/portfolio/` points to Projects & Research
-- `/blog/` points to Writing
+- `/about/` -> `/`
+- `/resume/` -> `/experience/`
+- `/portfolio/` -> `/projects-research/`
+- `/blog/` -> `/writing/`
