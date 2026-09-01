@@ -1330,15 +1330,10 @@ body.light-theme .navbar-link::after {
   transition: width var(--transition-1);
 }
 
-body.light-theme .navbar-link:hover,
-body.light-theme .navbar-link:focus {
-  color: var(--blue-primary-soft);
-  transform: translateY(-1px);
-}
-
-body:not(.light-theme) .navbar-link:hover,
-body:not(.light-theme) .navbar-link:focus {
+.navbar-link:hover,
+.navbar-link:focus {
   color: var(--light-gray);
+  transform: translateY(-1px);
 }
 
 .navbar-link:hover::after,
@@ -1931,6 +1926,18 @@ body.light-theme .recommendation-text {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.hamoye-logo-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body:not(.light-theme) .hamoye-logo-link {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 10px 14px;
 }
 
 .clients-item img {
