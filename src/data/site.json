@@ -1,0 +1,16 @@
+{
+  "baseUrl": "https://davidolukolatimi.cv",
+  "name": "David Olukolatimi",
+  "defaultRoute": "home",
+  "homeTitle": "David Olukolatimi | Data Scientist & Machine Learning Engineer",
+  "homeDescription": "David Olukolatimi is a Data Scientist and Machine Learning Engineer building production machine learning, AI, and data systems across insurance, education technology, client delivery, and applied research.",
+  "ogImage": "/assets/images/title_image.jpg",
+  "contactApiUrl": "https://personal-portfolio-backend-gze7.onrender.com/api/contact",
+  "compatibilityRoutes": [
+    { "url": "/home/", "file": "home.html", "target": "home" },
+    { "url": "/about/", "file": "about.html", "target": "home" },
+    { "url": "/resume/", "file": "resume.html", "target": "experience" },
+    { "url": "/portfolio/", "file": "portfolio.html", "target": "projects-research" },
+    { "url": "/blog/", "file": "blog.html", "target": "writing" }
+  ]
+}

@@ -50,8 +50,10 @@ for (let i = 0; i < testimonialsItem.length; i++) {
       modalImg.src = avatar.src;
       modalImg.alt = avatar.alt;
     }
-    if (modalTitle && title) modalTitle.innerHTML = title.innerHTML;
-    if (modalText && text) modalText.innerHTML = text.innerHTML;
+    if (modalTitle && title) modalTitle.textContent = title.textContent;
+    if (modalText && text) {
+      modalText.replaceChildren(text.cloneNode(true));
+    }
 
     testimonialsModalFunc();
 
@@ -68,7 +70,7 @@ if (overlay) overlay.addEventListener("click", testimonialsModalFunc);
 // custom select variables
 const select = document.querySelector("[data-select]");
 const selectItems = document.querySelectorAll("[data-select-item]");
-const selectValue = document.querySelector("[data-selecct-value]");
+const selectValue = document.querySelector("[data-select-value]");
 const filterBtn = document.querySelectorAll("[data-filter-btn]");
 
 if (select) {
@@ -140,23 +142,41 @@ const formBtn = document.querySelector("[data-form-btn]");
 const navigationLinks = document.querySelectorAll(".navbar-link");
 const pages = document.querySelectorAll("[data-page]");
 const pageRoutes = {
-  about: "/about/",
-  resume: "/resume/",
-  portfolio: "/portfolio/",
+  home: "/",
+  experience: "/experience/",
+  "projects-research": "/projects-research/",
+  writing: "/writing/",
   services: "/services/",
-  blog: "/blog/",
   contact: "/contact/"
+};
+const routeAliases = {
+  "/home/": "home",
+  "/about/": "home",
+  "/resume/": "experience",
+  "/portfolio/": "projects-research",
+  "/blog/": "writing"
+};
+const pageLabels = {
+  home: "home",
+  experience: "experience",
+  "projects-research": "projects & research",
+  writing: "writing",
+  services: "services",
+  contact: "contact me"
 };
 
 function pageNameFromPath(pathname) {
   const cleanPath = pathname.replace(/\/index\.html$/, "/");
-  const match = cleanPath.match(/^\/(about|resume|portfolio|services|blog|contact)\/?$/);
-  return match ? match[1] : "about";
+  if (cleanPath === "/") return "home";
+  if (routeAliases[cleanPath]) return routeAliases[cleanPath];
+  const match = cleanPath.match(/^\/(home|experience|projects-research|writing|services|contact)\/?$/);
+  return match ? match[1] : "home";
 }
 
 function pageNameFromLink(link) {
   const textName = link.textContent.trim().toLowerCase();
-  if (pageRoutes[textName]) return textName;
+  const labelMatch = Object.entries(pageLabels).find(([, label]) => label === textName);
+  if (labelMatch) return labelMatch[0];
 
   try {
     return pageNameFromPath(new URL(link.getAttribute("href"), window.location.origin).pathname);
@@ -176,8 +196,9 @@ function activatePage(pageName, options = {}) {
     link.classList.toggle("active", pageNameFromLink(link) === pageName);
   });
 
-  if (options.push !== false && window.location.pathname !== pageRoutes[pageName]) {
-    history.pushState({ page: pageName }, "", pageRoutes[pageName]);
+  const targetPath = options.path || pageRoutes[pageName];
+  if (options.push !== false && window.location.pathname !== targetPath) {
+    history.pushState({ page: pageName }, "", targetPath);
   }
 
   if (options.scroll !== false) window.scrollTo(0, 0);
@@ -316,18 +337,33 @@ if (themeToggleBtn) {
 
       const panel = document.createElement("div");
       panel.className = "paystack-trust-panel";
-      panel.innerHTML = `
-        <div class="paystack-trust-copy">
-          <span class="paystack-kicker">
-            <span class="paystack-mark">Paystack</span>
-            <span class="paystack-kicker-text">Secure checkout for fixed sessions</span>
-          </span>
-          <p>Prefer to discuss the scope first? Send a quick enquiry through the contact form.</p>
-        </div>
-        <button class="paystack-contact-link" type="button" data-general-contact>
-          Ask a Question
-        </button>
-      `;
+
+      const copy = document.createElement("div");
+      copy.className = "paystack-trust-copy";
+
+      const kicker = document.createElement("span");
+      kicker.className = "paystack-kicker";
+
+      const mark = document.createElement("span");
+      mark.className = "paystack-mark";
+      mark.textContent = "Paystack";
+
+      const kickerText = document.createElement("span");
+      kickerText.className = "paystack-kicker-text";
+      kickerText.textContent = "Secure checkout for fixed sessions";
+
+      const note = document.createElement("p");
+      note.textContent = "Prefer to discuss the scope first? Send a quick enquiry through the contact form.";
+
+      const button = document.createElement("button");
+      button.className = "paystack-contact-link";
+      button.type = "button";
+      button.dataset.generalContact = "";
+      button.textContent = "Ask a Question";
+
+      kicker.append(mark, kickerText);
+      copy.append(kicker, note);
+      panel.append(copy, button);
 
       currencySelector.insertAdjacentElement("afterend", panel);
     }
@@ -564,81 +600,6 @@ if (themeToggleBtn) {
         });
       });
     }
-
-    // -----------------------------------------------------------------
-    // PROMO TEXT ROTATION
-    // Rotate messages in the top banner every few seconds.  The text
-    // scrolls via CSS marquee animation, but we replace the content
-    // periodically to keep it interesting.  Feel free to add more
-    // messages to the array for variety.
-    // -----------------------------------------------------------------
-    // const promoTextEl = document.getElementById("promo-text");
-    // if (promoTextEl) {
-    //   /*
-    //    * Promotional messages used in the top banner.  These phrases are
-    //    * intentionally succinct and inspiring, touching on AI, innovation,
-    //    * mentoring, open source and data‑driven impact.  The array contains
-    //    * 20 entries to minimise repetition.  "Let's build something
-    //    * amazing together" is intentionally omitted here (it is reserved for
-    //    * the bottom banner).
-    //    */
-    //   /*
-    //    * Curated promotional messages for the top banner.
-    //    * These taglines emphasise clarity, innovation and impact in the AI/ML domain.
-    //    * We removed the bottom tagline "Let’s build something amazing together" from
-    //    * this list so it appears exclusively in the footer.  Feel free to update
-    //    * these phrases to better reflect your evolving brand voice.
-    //    */
-    //   const promoMessages = [
-    //     "Transforming data into decisions",
-    //     "Precision. Performance. Progress.",
-    //     "Building smarter solutions for everyday problems",
-    //     "Unlocking insights with intelligence",
-    //     "Empower your data journey",
-    //     "Innovate today, lead tomorrow",
-    //     "Data‑driven solutions for modern challenges",
-    //     "Crafting intelligence for every industry",
-    //     "Next‑gen solutions for a smarter tomorrow",
-    //     "Intelligence that evolves with you",
-    //     "Your vision, our technology",
-    //     "Streamlining your world with machine learning",
-    //     "Where technology meets brilliance",
-    //     "Smart tech, real results",
-    //     "Inspiring growth through intelligent systems",
-    //     "Bridge insights with automated learning",
-    //     "Excellence in every line of code",
-    //     "Harness knowledge, fuel progress",
-    //     "From ideas to intelligent algorithms",
-    //     "Amplifying potential with machine learning"
-    //   ];
-    //   let promoIndex = 0;
-    //   // Ensure the promo text element fades gracefully between messages.
-    //   promoTextEl.style.transition = "opacity 0.6s ease-in-out";
-    //   function cyclePromo() {
-    //     // Fade out the current message
-    //     promoTextEl.style.opacity = 0;
-    //     setTimeout(() => {
-    //       // Switch to the next message
-    //       promoIndex = (promoIndex + 1) % promoMessages.length;
-    //       promoTextEl.textContent = promoMessages[promoIndex];
-    //       // Restart the horizontal scroll animation so the new message flows from right to left.
-    //       promoTextEl.style.animation = "none";
-    //       // Force reflow to reset the animation
-    //       void promoTextEl.offsetWidth;
-    //       promoTextEl.style.animation = "promo-scroll 14s linear infinite";
-    //       // Fade back in
-    //       promoTextEl.style.opacity = 1;
-    //       // Schedule the next cycle: display for 5 seconds, then fade and
-    //       // delay for 1 second before the next message starts
-    //       setTimeout(cyclePromo, 5000);
-    //     }, 1000);
-    //   }
-    //   // Initialise with the first message
-    //   promoTextEl.textContent = promoMessages[0];
-    //   promoTextEl.style.opacity = 1;
-    //   // Start cycling after a delay so the first message is visible for 5s
-    //   setTimeout(cyclePromo, 5000);
-    // }
 
     const promoTextEl = document.getElementById("promo-text");
 

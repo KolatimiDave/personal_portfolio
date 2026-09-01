@@ -1,0 +1,7 @@
+__pycache__/
+*.py[cod]
+tmp/
+node_modules/
+package-lock.json
+.env
+backend/.env

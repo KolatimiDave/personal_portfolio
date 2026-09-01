@@ -1,206 +1,71 @@
-<!DOCTYPE html>
-<html lang="en">
+import re
+from pathlib import Path
 
-<head>
 
-  <meta charset="UTF-8">
+ROOT = Path(__file__).resolve().parents[1]
+INDEX = ROOT / "index.html"
 
-  <meta http-equiv="X-UA-Compatible"
-        content="IE=edge">
 
-  <meta name="viewport"
-        content="width=device-width, initial-scale=1.0">
+def extract_between(text: str, start_marker: str, end_marker: str) -> str:
+    start = text.index(start_marker)
+    end = text.index(end_marker, start)
+    return text[start:end]
 
-  <title>Writing - David Olukolatimi</title>
 
-  <meta property="og:title" content="Writing - David Olukolatimi">
-  <meta property="og:description" content="Articles by David Olukolatimi on artificial intelligence, engineering, career growth, learning, work, and personal development.">
-  <meta property="og:url" content="https://davidolukolatimi.cv/writing/">
-  <meta property="og:type" content="website">
+def extract_between_any(text: str, start_marker: str, end_markers: list[str]) -> str:
+    start = text.index(start_marker)
+    end = min(
+        text.index(marker, start)
+        for marker in end_markers
+        if marker in text[start:]
+    )
+    return text[start:end]
 
-  <link rel="canonical" href="https://davidolukolatimi.cv/writing/">
 
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Person",
-  "name": "David Olukolatimi",
-  "jobTitle": "Machine Learning Engineer and Data Scientist",
-  "url": "https://davidolukolatimi.cv/",
-  "sameAs": [
-    "https://www.linkedin.com/in/olukolatimidavid/",
-    "https://github.com/KolatimiDave/",
-    "https://olukolatimidavid.medium.com/",
-    "https://x.com/LightinLetters"
-  ]
-}
-</script>
+def replace_articles(html: str, articles: str) -> str:
+    start = html.index('      <article class="about')
+    end = html.index("\n\n    </div>", start)
+    return html[:start] + articles + html[end:]
 
-  <meta name="description" content="Articles by David Olukolatimi on artificial intelligence, engineering, career growth, learning, work, and personal development.">
 
-  <link rel="icon"
-      type="image/png"
-      href="/assets/images/title_image.jpg">
+def main() -> None:
+    html = INDEX.read_text(encoding="utf-8")
 
-  <link rel="stylesheet"
-        href="/assets/css/style.css">
+    recommendations_and_modal = extract_between(
+        html,
+        '        <section class="recommendations-section">',
+        '        <section class="clients">',
+    )
+    clients = extract_between(
+        html,
+        '        <section class="clients">',
+        "\n\n      </article>",
+    )
+    services_article = extract_between_any(
+        html,
+        '      <article class="services-page"',
+        [
+            '      <article class="blog"',
+            '      <article class="blog writing"',
+        ],
+    )
+    contact_inner = extract_between(
+        html,
+        '        <section class="contact-form">',
+        "\n\n      </article>",
+    )
 
-  <link rel="preconnect"
-        href="https://fonts.googleapis.com">
-
-  <link rel="preconnect"
-        href="https://fonts.gstatic.com"
-        crossorigin>
-
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
-        rel="stylesheet">
-
-  <meta name="google-site-verification" content="sd3Ny3NhvYTD40961y8P-_rs-BonseDF1M5iZjCyb5Y" />
-
-  <meta property="og:image" content="https://davidolukolatimi.cv/assets/images/title_image.jpg">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Writing - David Olukolatimi">
-  <meta name="twitter:description" content="Articles by David Olukolatimi on artificial intelligence, engineering, career growth, learning, work, and personal development.">
-  <meta name="twitter:image" content="https://davidolukolatimi.cv/assets/images/title_image.jpg"></head>
-
-<body>
-
-  <div class="announcement-container">
-    <div class="top-banner">
-      <span id="promo-text">Transforming data into intelligence</span>
-    </div>
-    <div class="bottom-banner">
-      Let's build something amazing together.
-    </div>
-  </div>
-
-  <main>
-
-    <aside class="sidebar"
-           data-sidebar>
-
-      <div class="sidebar-info">
-
-        <figure class="avatar-box">
-
-          <img src="/assets/images/MyProfilePic.jpg"
-               alt="Portrait of David Olukolatimi"
-               width="104" height="104" decoding="async" loading="eager">
-        </figure>
-
-        <div class="info-content">
-
-          <h1 class="name"
-              title="David Olukolatimi">
-            David Olukolatimi
-          </h1>
-
-          <p class="title">
-            Data Scientist &amp; Machine Learning Engineer
-          </p>
-
-        </div>
-
-        <button class="info_more-btn"
-                data-sidebar-btn>
-
-          <span>
-            Show Contacts
-          </span>
-
-          <ion-icon name="chevron-down"></ion-icon>
-
-        </button>
-
-      </div>
-
-      <div class="sidebar-info_more">
-
-        <div class="separator"></div>
-
-        <ul class="contacts-list">
-
-          <li class="contact-item">
-
-            <div class="icon-box">
-              <ion-icon name="mail-outline"></ion-icon>
-            </div>
-
-            <div class="contact-info">
-
-              <p class="contact-title">
-                Email
-              </p>
-
-              <a href="mailto:davidolukolatimi@gmail.com"
-                 class="contact-link">
-                davidolukolatimi@gmail.com
-              </a>
-
-            </div>
-
-          </li>
-
-          <li class="contact-item">
-
-            <div class="icon-box">
-              <ion-icon name="phone-portrait-outline"></ion-icon>
-            </div>
-
-            <div class="contact-info">
-
-              <p class="contact-title">
-                Phone
-              </p>
-
-              <a href="tel:+2347041035041"
-                 class="contact-link">
-                +234 704 103 5041
-              </a>
-
-            </div>
-
-          </li>
-
-          <li class="contact-item">
-
-            <div class="icon-box">
-              <ion-icon name="location-outline"></ion-icon>
-            </div>
-
-            <div class="contact-info">
-
-              <p class="contact-title">
-                Location
-              </p>
-
-              <address>
-                Lagos, Nigeria
-              </address>
-
-            </div>
-
-          </li>
-
-        </ul>
-
-      </div>
-
-    </aside>
-
-    <div class="main-content">
-
-      <nav class="navbar">
+    nav = """      <nav class="navbar">
 
         <ul class="navbar-list">
 
-          <li class="navbar-item"><a class="navbar-link" href="/">Home</a></li>
+          <li class="navbar-item"><a class="navbar-link active" href="/">Home</a></li>
 
           <li class="navbar-item"><a class="navbar-link" href="/experience/">Experience</a></li>
 
           <li class="navbar-item"><a class="navbar-link" href="/projects-research/">Projects &amp; Research</a></li>
 
-          <li class="navbar-item"><a class="navbar-link active" href="/writing/">Writing</a></li>
+          <li class="navbar-item"><a class="navbar-link" href="/writing/">Writing</a></li>
 
           <li class="navbar-item"><a class="navbar-link" href="/services/">Services</a></li>
 
@@ -211,9 +76,9 @@
           <ion-icon name="sunny-outline" class="theme-icon"></ion-icon>
         </button>
 
-      </nav>
+      </nav>"""
 
-      <article class="about home"
+    home_article = f"""      <article class="about home active"
                data-page="home">
 
         <header class="home-hero">
@@ -330,240 +195,13 @@
           </ul>
         </section>
 
-        <section class="recommendations-section">
-          <h3 class="h3 testimonials-title">Recommendations</h3>
-          <div class="recommendations-slider">
-            <button class="slider-btn prev" aria-label="Previous recommendation">
-              <ion-icon name="chevron-back-outline"></ion-icon>
-            </button>
-            <div class="slides">
-
-              <div class="slide">
-                <div class="recommendation-card">
-                  <figure class="recommendation-avatar">
-                    <img src="/assets/images/avatar-1.png" alt="Gafar Adediran" width="60" height="60" decoding="async" loading="lazy">
-                  </figure>
-                  <div class="recommendation-content">
-                    <div class="recommendation-header">
-                      <h4 class="h4 recommendation-title">
-                        Gafar Adediran
-                        <span class="rec-role">Actuarial Risk Leader at AXA&nbsp;Mansard</span>
-                      </h4>
-                      <a href="https://www.linkedin.com/in/olukolatimidavid/#:~:text=Gafar%20Adediran,Data%20Science%20community."
-                         class="recommendation-linkedin"
-                         target="_blank"
-                         aria-label="View full recommendation on LinkedIn">
-                        <ion-icon name="logo-linkedin"></ion-icon>
-                      </a>
-                    </div>
-                    <p class="recommendation-text">
-                      David is an efficient business transformation professional with a sound knowledge of data science.
-                      He is always willing to transfer knowledge in any way possible. I&apos;ve seen him guide and train a
-                      team of staff within the AXA Mansard data science community.
-                    </p>
-                    <button class="read-more-btn" aria-expanded="false">Read more</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="slide">
-                <div class="recommendation-card">
-                  <figure class="recommendation-avatar">
-                    <img src="/assets/images/avatar-2.png" alt="Violet Johnson" width="60" height="60" decoding="async" loading="lazy">
-                  </figure>
-                  <div class="recommendation-content">
-                    <div class="recommendation-header">
-                      <h4 class="h4 recommendation-title">
-                        Violet Johnson
-                        <span class="rec-role">Data Analytics &amp; Business Support Lead</span>
-                      </h4>
-                      <a href="https://www.linkedin.com/in/olukolatimidavid/#:~:text=Violet%20Johnson,to%20any%20organization."
-                         class="recommendation-linkedin"
-                         target="_blank"
-                         aria-label="View full recommendation on LinkedIn">
-                        <ion-icon name="logo-linkedin"></ion-icon>
-                      </a>
-                    </div>
-                    <p class="recommendation-text">
-                      David is an astute data scientist who knows how to identify problems and use data to recommend
-                      solutions for effective decision making. We co-led the AXA Data Science Community, where he taught
-                      more than 40 employees diverse data science skills. He simplifies difficult concepts and always
-                      goes above and beyond to assist others. Working with David was a delight and I highly recommend him
-                      to any organisation.
-                    </p>
-                    <button class="read-more-btn" aria-expanded="false">Read more</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="slide">
-                <div class="recommendation-card">
-                  <figure class="recommendation-avatar">
-                    <img src="/assets/images/avatar-3.png" alt="Ifunanya Doris Chidume" width="60" height="60" decoding="async" loading="lazy">
-                  </figure>
-                  <div class="recommendation-content">
-                    <div class="recommendation-header">
-                      <h4 class="h4 recommendation-title">
-                        Ifunanya Doris Chidume
-                        <span class="rec-role">Customer Service Agent at AXA&nbsp;Mansard</span>
-                      </h4>
-                      <a href="https://www.linkedin.com/in/olukolatimidavid/details/recommendations/?detailScreenTabIndex=0#:~:text=Ifunanya%20Doris%20Chidume,been%20so%20helpful"
-                         class="recommendation-linkedin"
-                         target="_blank"
-                         aria-label="View full recommendation on LinkedIn">
-                        <ion-icon name="logo-linkedin"></ion-icon>
-                      </a>
-                    </div>
-                    <p class="recommendation-text">
-                      David is a smart and selfless person. In my journey to becoming a data scientist he has been
-                      immensely helpful, offering guidance and support whenever I needed it. His mentorship has been
-                      invaluable to my growth.
-                    </p>
-                    <button class="read-more-btn" aria-expanded="false">Read more</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="slide">
-                <div class="recommendation-card">
-                  <figure class="recommendation-avatar">
-                    <img src="/assets/images/avatar-4.png" alt="Chukwudi Osuofia" width="60" height="60" decoding="async" loading="lazy">
-                  </figure>
-                  <div class="recommendation-content">
-                    <div class="recommendation-header">
-                      <h4 class="h4 recommendation-title">
-                        Chukwudi Osuofia
-                        <span class="rec-role">Project Manager</span>
-                      </h4>
-                      <a href="https://www.linkedin.com/in/olukolatimidavid/details/recommendations/?detailScreenTabIndex=0#:~:text=Chukwudi%20Osuofia,skills%20are%20exceptional."
-                        class="recommendation-linkedin"
-                        target="_blank"
-                        aria-label="View full recommendation on LinkedIn">
-                        <ion-icon name="logo-linkedin"></ion-icon>
-                      </a>
-                    </div>
-                    <p class="recommendation-text">
-                      Very diligent and highly skilled data scientist. David&#39;s Python skills are exceptional.
-                    </p>
-                    <button class="read-more-btn" aria-expanded="false">Read more</button>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-            <button class="slider-btn next" aria-label="Next recommendation">
-              <ion-icon name="chevron-forward-outline"></ion-icon>
-            </button>
-          </div>
-        </section>
-
-        <div class="modal-container"
-             data-modal-container>
-
-          <div class="overlay"
-               data-overlay></div>
-
-          <section class="testimonials-modal">
-
-            <button class="modal-close-btn"
-                    data-modal-close-btn>
-              <ion-icon name="close-outline"></ion-icon>
-            </button>
-
-            <div class="modal-img-wrapper">
-
-              <figure class="modal-avatar-box">
-                <img src="/assets/images/avatar-1.png"
-                     alt="testimonial avatar"
-                     width="80"
-                     data-modal-img height="80" decoding="async" loading="lazy">
-              </figure>
-
-              <img src="/assets/images/icon-quote.svg"
-                   alt="quote icon"
-                   width="32"
-                   height="32"
-                   loading="lazy"
-                   decoding="async">
-            </div>
-
-            <div class="modal-content">
-
-              <h4 class="h3 modal-title"
-                  data-modal-title>
-                Testimonial
-              </h4>
-
-              <time datetime="2024-01-01">
-                2024
-              </time>
-
-              <div data-modal-text></div>
-
-            </div>
-
-          </section>
-
-        </div>
-
-        <section class="clients">
-
-          <h3 class="h3 clients-title">
-            Collaborations &amp; Ecosystem
-          </h3>
-
-          <ul class="clients-list has-scrollbar">
-
-            <li class="clients-item">
-              <a href="https://www.axamansard.com" target="_blank" rel="noopener">
-                <img src="/assets/images/axa_mansard_logo.png"
-                     alt="AXA Mansard logo" width="2136" height="476" decoding="async" loading="lazy">
-              </a>
-            </li>
-
-            <li class="clients-item">
-              <a href="https://www.hamoye.com" target="_blank" rel="noopener">
-
-                <img src="/assets/images/hamoye_logo_dark.png"
-                     alt="Hamoye logo" width="512" height="83" decoding="async" loading="lazy">
-              </a>
-            </li>
-
-            <li class="clients-item">
-              <a href="https://www.fiverr.com" target="_blank" rel="noopener">
-                <img src="/assets/images/fiverr_logo.png"
-                     alt="Fiverr logo" width="1500" height="1500" decoding="async" loading="lazy">
-              </a>
-            </li>
-
-            <li class="clients-item">
-              <a href="https://developers.google.com/community/gdsc" target="_blank" rel="noopener">
-                <img src="/assets/images/gdsc_logo.png"
-                     alt="Google Developer Student Clubs logo" width="1024" height="1024" decoding="async" loading="lazy">
-              </a>
-            </li>
-
-            <li class="clients-item">
-              <a href="https://www.datasciencenigeria.org" target="_blank" rel="noopener">
-                <img src="/assets/images/data_science_nigeria_logo.png"
-                     alt="Data Science Nigeria logo" width="300" height="150" decoding="async" loading="lazy">
-              </a>
-            </li>
-
-            <li class="clients-item">
-              <a href="https://www.rubiestech.org" target="_blank" rel="noopener">
-                <img src="/assets/images/rubies_logo.png"
-                     alt="Rubies Technologies logo" width="200" height="200" decoding="async" loading="lazy">
-              </a>
-            </li>
-
-          </ul>
-
-        </section>
+{recommendations_and_modal}
+{clients}
 
       </article>
+"""
 
-      <article class="resume experience"
+    experience_article = """      <article class="resume experience"
                data-page="experience">
 
         <header>
@@ -660,8 +298,9 @@
         </section>
 
       </article>
+"""
 
-      <article class="portfolio projects-research"
+    projects_article = """      <article class="portfolio projects-research"
                data-page="projects-research">
 
         <header>
@@ -714,7 +353,7 @@
             </li>
             <li class="project-item active featured-project-card" data-filter-item data-category="published research">
               <a href="https://doi.org/10.3311/PPee.43418" target="_blank" rel="noopener">
-                <figure class="project-img"><div class="project-item-icon-box"><ion-icon name="document-text-outline"></ion-icon></div><img src="/assets/images/optimized/pneumonia-cnn-research.webp" alt="Chest X-ray samples from the published pneumonia CNN research" loading="lazy" width="1400" height="788" decoding="async"></figure>
+                <figure class="project-img"><div class="project-item-icon-box"><ion-icon name="document-text-outline"></ion-icon></div><img src="/assets/images/pneumonia-cnn-research.jpg" alt="Chest X-ray samples from the published pneumonia CNN research" loading="lazy" width="1400" height="788" decoding="async"></figure>
                 <h3 class="project-title">Systematic Hyperparameter Optimization of CNNs for Pneumonia Detection</h3>
                 <p class="project-category">Published Research</p>
                 <p class="project-description">Peer-reviewed research evaluating VGG16, ResNet50, InceptionV3, and MobileNetV2 on the RSNA Pneumonia Detection Challenge dataset. InceptionV3 reported a test F1 score of 92.5 percent and recall of 91.8 percent.</p>
@@ -759,160 +398,11 @@
         </section>
 
       </article>
+"""
 
-      <article class="services-page"
-               data-page="services">
+    services_article = services_article.replace('      <article class="services-page"', '      <article class="services-page"')
 
-        <header>
-          <h2 class="h2 article-title">Services</h2>
-        </header>
-
-        <section class="services-section">
-
-          <div class="currency-selector">
-            <label for="currency-select">Currency:</label>
-            <select id="currency-select">
-              <option value="USD" selected>USD</option>
-              <option value="NGN">Naira</option>
-              <option value="EUR">EUR</option>
-              <option value="GBP">GBP</option>
-              <option value="JPY">JPY</option>
-            </select>
-          </div>
-          <ul class="services-cards">
-
-            <li class="service-card" data-service-index="0">
-              <div class="service-card-icon">
-                <ion-icon name="chatbubbles-outline"></ion-icon>
-              </div>
-              <div class="service-card-content">
-                <h4 class="h4 service-card-title">AI Consulting</h4>
-                <p class="service-card-text">Strategic guidance on adopting AI and ML: define problems, plan roadmaps and evaluate solutions to maximise ROI.</p>
-
-                <p class="service-card-price" data-billing="hourly" data-min="23" data-max="60">
-                  <strong class="price-display">$23-$60/hr</strong>
-                </p>
-                <button class="service-contact-btn" data-service="AI Consulting">Book Now</button>
-              </div>
-            </li>
-
-            <li class="service-card" data-service-index="1">
-              <div class="service-card-icon">
-                <ion-icon name="construct-outline"></ion-icon>
-              </div>
-              <div class="service-card-content">
-                <h4 class="h4 service-card-title">Custom ML Development</h4>
-                <p class="service-card-text">Design and build predictive models tailored to your business, from regression and classification to deep learning.</p>
-                <p class="service-card-price" data-billing="project" data-min="90" data-max="2000">
-                  <strong class="price-display">$90-$2,000</strong>
-                </p>
-                <button class="service-contact-btn" data-service="Custom ML Development">Request Quote</button>
-              </div>
-            </li>
-
-            <li class="service-card" data-service-index="2">
-              <div class="service-card-icon">
-                <ion-icon name="cloud-upload-outline"></ion-icon>
-              </div>
-              <div class="service-card-content">
-                <h4 class="h4 service-card-title">Data Pipelines &amp; ETL</h4>
-                <p class="service-card-text">Engineer robust pipelines for ingesting, cleaning and transforming data to fuel analytics and machine learning.</p>
-                <p class="service-card-price" data-billing="project" data-min="90" data-max="2000">
-                  <strong class="price-display">$90-$2,000</strong>
-                </p>
-                <button class="service-contact-btn" data-service="Data Pipelines & ETL">Request Quote</button>
-              </div>
-            </li>
-
-            <li class="service-card" data-service-index="3">
-              <div class="service-card-icon">
-                <ion-icon name="rocket-outline"></ion-icon>
-              </div>
-              <div class="service-card-content">
-                <h4 class="h4 service-card-title">MLOps &amp; Deployment</h4>
-                <p class="service-card-text">Implement continuous integration, containerisation and scalable serving to take models from notebook to production.</p>
-                <p class="service-card-price" data-billing="project" data-min="90" data-max="2000">
-                  <strong class="price-display">$90-$2,000</strong>
-                </p>
-                <button class="service-contact-btn" data-service="MLOps & Deployment">Request Quote</button>
-              </div>
-            </li>
-
-            <li class="service-card" data-service-index="4">
-              <div class="service-card-icon">
-                <ion-icon name="document-text-outline"></ion-icon>
-              </div>
-              <div class="service-card-content">
-                <h4 class="h4 service-card-title">Technical Writing</h4>
-                <p class="service-card-text">Craft clear documentation, blog posts and whitepapers that communicate raw topics to varied audiences.</p>
-                <p class="service-card-price" data-billing="hourly" data-min="23" data-max="60">
-                  <strong class="price-display">$23-$60/hr</strong>
-                </p>
-                <button class="service-contact-btn" data-service="Technical Writing">Request Quote</button>
-              </div>
-            </li>
-
-            <li class="service-card" data-service-index="5">
-              <div class="service-card-icon">
-                <ion-icon name="school-outline"></ion-icon>
-              </div>
-              <div class="service-card-content">
-                <h4 class="h4 service-card-title">Tutoring &amp; Training</h4>
-                <p class="service-card-text">Personalised coaching and corporate workshops on data science, machine learning and cloud platforms.</p>
-                <p class="service-card-price" data-billing="hourly" data-min="23" data-max="60">
-                  <strong class="price-display">$23-$60/hr</strong>
-                </p>
-                <button class="service-contact-btn" data-service="Tutoring & Training">Book Now</button>
-              </div>
-            </li>
-
-            <li class="service-card" data-service-index="6">
-              <div class="service-card-icon">
-                <ion-icon name="bar-chart-outline"></ion-icon>
-              </div>
-              <div class="service-card-content">
-                <h4 class="h4 service-card-title">Dashboards &amp; Visualisation</h4>
-                <p class="service-card-text">Build interactive dashboards and visual analytics to help teams explore and communicate insights.</p>
-                <p class="service-card-price" data-billing="project" data-min="90" data-max="2000">
-                  <strong class="price-display">$90-$2,000</strong>
-                </p>
-                <button class="service-contact-btn" data-service="Dashboards & Visualisation">Request Quote</button>
-              </div>
-            </li>
-
-            <li class="service-card" data-service-index="7">
-              <div class="service-card-icon">
-                <ion-icon name="flask-outline"></ion-icon>
-              </div>
-              <div class="service-card-content">
-                <h4 class="h4 service-card-title">Research &amp; Prototyping</h4>
-                <p class="service-card-text">Explore innovative AI concepts, perform feasibility studies and develop proof-of-concept prototypes.</p>
-                <p class="service-card-price" data-billing="project" data-min="90" data-max="2000">
-                  <strong class="price-display">$90-$2,000</strong>
-                </p>
-                <button class="service-contact-btn" data-service="Research & Prototyping">Request Quote</button>
-              </div>
-            </li>
-
-            <li class="service-card" data-service-index="8">
-              <div class="service-card-icon">
-                <ion-icon name="people-outline"></ion-icon>
-              </div>
-              <div class="service-card-content">
-                <h4 class="h4 service-card-title">Code Review &amp; Mentorship</h4>
-                <p class="service-card-text">Provide expert feedback on your ML codebases and mentor teams on best practices and design patterns.</p>
-                <p class="service-card-price" data-billing="hourly" data-min="23" data-max="60">
-                  <strong class="price-display">$23-$60/hr</strong>
-                </p>
-                <button class="service-contact-btn" data-service="Code Review & Mentorship">Book Now</button>
-              </div>
-            </li>
-          </ul>
-        </section>
-
-      </article>
-
-      <article class="blog writing active"
+    writing_article = """      <article class="blog writing"
                data-page="writing">
 
         <header>
@@ -932,7 +422,7 @@
           </div>
           <ul class="blog-posts-list">
             <li class="blog-post-item" data-blog-category="ai & technology"><a href="https://olukolatimidavid.medium.com/" target="_blank" rel="noopener"><figure class="blog-banner-box"><img src="/assets/images/blog-5.jpg" alt="AI trust article thumbnail" loading="lazy" width="600" height="391" decoding="async"></figure><div class="blog-content"><div class="blog-meta"><p class="blog-category">AI &amp; Technology</p><span class="dot"></span><time datetime="2026-01-01">2026</time></div><h3 class="h3 blog-item-title">AI Can Do More Work Now. Can We Trust the Work?</h3><p class="blog-text">Explores accountability, human review, identity, control, and the conditions required for people and organisations to trust AI generated work.</p></div></a></li>
-            <li class="blog-post-item" data-blog-category="ai & technology"><a href="https://olukolatimidavid.medium.com/" target="_blank" rel="noopener"><figure class="blog-banner-box"><img src="/assets/images/blog-6.jpg" alt="Future of work article thumbnail" loading="lazy" width="600" height="394" decoding="async"></figure><div class="blog-content"><div class="blog-meta"><p class="blog-category">AI &amp; Technology</p><span class="dot"></span><time datetime="2026-03-01">Mar 2026</time></div><h3 class="h3 blog-item-title">The Future of Work is Safe</h3><p class="blog-text">A practical view of how automation changes work and why collaboration with AI matters more than simple replacement.</p></div></a></li>
+            <li class="blog-post-item" data-blog-category="ai & technology"><a href="https://olukolatimidavid.medium.com/" target="_blank" rel="noopener"><figure class="blog-banner-box"><img src="/assets/images/blog-6.jpg" alt="Future of work article thumbnail" loading="lazy" width="600" height="391" decoding="async"></figure><div class="blog-content"><div class="blog-meta"><p class="blog-category">AI &amp; Technology</p><span class="dot"></span><time datetime="2026-03-01">Mar 2026</time></div><h3 class="h3 blog-item-title">The Future of Work is Safe</h3><p class="blog-text">A practical view of how automation changes work and why collaboration with AI matters more than simple replacement.</p></div></a></li>
             <li class="blog-post-item" data-blog-category="ai & technology"><a href="https://medium.com/analytics-vidhya/ai-models-on-edge-devices-with-openvino-5a057bc50e07" target="_blank" rel="noopener"><figure class="blog-banner-box"><img src="/assets/images/blog-5.jpg" alt="AI Models on Edge Devices thumbnail" loading="lazy" width="600" height="391" decoding="async"></figure><div class="blog-content"><div class="blog-meta"><p class="blog-category">AI &amp; Technology</p><span class="dot"></span><time datetime="2020-12-24">Dec 24, 2020</time></div><h3 class="h3 blog-item-title">AI Models on Edge Devices with OpenVINO</h3><p class="blog-text">An introduction to deploying AI models on edge hardware with Intel OpenVINO.</p></div></a></li>
             <li class="blog-post-item" data-blog-category="career & learning"><a href="https://olukolatimidavid.medium.com/getting-into-the-data-space-my-experience-a92eb1650323" target="_blank" rel="noopener"><figure class="blog-banner-box"><img src="/assets/images/blog-3.jpg" alt="Getting into the Data Space thumbnail" loading="lazy" width="601" height="401" decoding="async"></figure><div class="blog-content"><div class="blog-meta"><p class="blog-category">Career &amp; Learning</p><span class="dot"></span><time datetime="2024-09-17">Sep 17, 2024</time></div><h3 class="h3 blog-item-title">Getting into the Data Space</h3><p class="blog-text">A personal account of moving from university technology communities into data science.</p></div></a></li>
             <li class="blog-post-item" data-blog-category="career & learning"><a href="https://olukolatimidavid.medium.com/opportunity-cost-of-knowledge-8341a439a7d9" target="_blank" rel="noopener"><figure class="blog-banner-box"><img src="/assets/images/blog-1.jpg" alt="Opportunity Cost of Knowledge thumbnail" loading="lazy" width="800" height="800" decoding="async"></figure><div class="blog-content"><div class="blog-meta"><p class="blog-category">Career &amp; Learning</p><span class="dot"></span><time datetime="2025-01-30">Jan 30, 2025</time></div><h3 class="h3 blog-item-title">Opportunity Cost of Knowledge</h3><p class="blog-text">A reflection on why knowledge fades and why documenting learning gives us a way back to ideas.</p></div></a></li>
@@ -943,8 +433,9 @@
         </section>
 
       </article>
+"""
 
-      <article class="contact"
+    contact_article = f"""      <article class="contact"
                data-page="contact">
 
         <header>
@@ -958,95 +449,33 @@
           <div><span>Location</span><p>Lagos, Nigeria</p></div>
         </section>
 
-        <section class="contact-form">
-
-          <h3 class="h3 form-title">
-            Contact Form
-          </h3>
-
-          <form id="contactForm"
-                class="form"
-                data-form>
-
-            <div class="input-wrapper">
-              <div class="input-group">
-                <label for="fullname" class="form-label">Full name <span class="required">*</span></label>
-                <input type="text"
-                       id="fullname"
-                       name="fullname"
-                       class="form-input"
-                       placeholder="Enter your full name"
-                       required
-                       data-form-input>
-              </div>
-
-              <div class="input-group">
-                <label for="email" class="form-label form-label-row">
-                <span>Email address <span class="required">*</span></span>
-
-                <span class="info-tooltip" tabindex="0" aria-label="Why do we ask for your email?">
-                  <span class="info-icon" aria-hidden="true">i</span>
-
-                  <span class="tooltip-text" role="tooltip">
-                    Your email isn't used to send this message (you're not logged in).
-                    It's only needed so I can reply back to you after I receive your message.
-                  </span>
-                </span>
-              </label>
-              <input type="email"
-                       id="email"
-                       name="email"
-                       class="form-input"
-                       placeholder="Enter your email"
-                       required
-                       data-form-input>
-
-              </div>
-            </div>
-
-            <div class="input-group full-width">
-              <label for="message" class="form-label">Your message <span class="required">*</span></label>
-              <textarea id="message"
-                        name="message"
-                        class="form-input"
-                        placeholder="Your Message (max 500 characters)"
-                        required
-                        maxlength="500"
-                        data-form-input></textarea>
-            </div>
-
-            <p id="contact-error" class="form-error" aria-live="polite"></p>
-
-            <button class="form-btn"
-                    type="submit"
-                    data-form-btn>
-
-              <ion-icon name="paper-plane"></ion-icon>
-
-              <span>
-                Send Message
-              </span>
-
-            </button>
-
-          </form>
-
-        </section>
-
-        <section class="mapbox" data-mapbox>
-          <figure>
-
-            <iframe src="https://maps.google.com/maps?q=lagos%20nigeria&t=&z=10&ie=UTF8&iwloc=&output=embed" width="250" height="150" loading="lazy"></iframe>
-          </figure>
-        </section>
+{contact_inner}
 
       </article>
+"""
 
-    </div>
+    articles = "\n".join([
+        home_article,
+        experience_article,
+        projects_article,
+        services_article,
+        writing_article,
+        contact_article,
+    ])
 
-  </main>
+    html = re.sub(r'      <nav class="navbar">[\s\S]*?      </nav>', nav, html, count=1)
+    html = replace_articles(html, articles)
+    html = re.sub(r'\s*<ul class="social-list top-social-list">[\s\S]*?</ul>', "", html, count=1)
+    html = re.sub(r'\s*<ul class="social-list bottom-social-list">[\s\S]*?</ul>', "", html, count=1)
+    html = re.sub(
+        r'\s*<li class="contact-item">\s*<div class="icon-box">\s*<ion-icon name="calendar-outline"></ion-icon>\s*</div>\s*<div class="contact-info">\s*<p class="contact-title">\s*Date of Birth\s*</p>\s*<time datetime="11-11">\s*November 11\s*</time>\s*</div>\s*</li>',
+        "",
+        html,
+        count=1,
+    )
+    html = html.replace("AI Engineer &amp; Data Scientist", "Data Scientist &amp; Machine Learning Engineer")
 
-  <footer class="site-footer">
+    footer = """  <footer class="site-footer">
     <nav class="footer-links" aria-label="Footer links">
       <a href="https://www.linkedin.com/in/olukolatimidavid/" target="_blank" rel="noopener">LinkedIn</a>
       <a href="https://github.com/KolatimiDave/" target="_blank" rel="noopener">GitHub</a>
@@ -1057,15 +486,13 @@
     </nav>
     <p>&copy; David Olukolatimi. Built around data, engineering, ideas, and practical impact.</p>
   </footer>
+"""
+    html = re.sub(r'\n\n  <footer class="site-footer">[\s\S]*?</footer>', "", html, count=1)
+    html = re.sub(r'\n\n  <script src="/assets/js/script\.js\?v=4"></script>', f"\n\n{footer}\n  <script src=\"/assets/js/script.js?v=4\"></script>", html, count=1)
 
-  <script src="/assets/js/script.js?v=4"></script>
+    INDEX.write_text(html, encoding="utf-8")
+    print("Applied blueprint content to index.html source.")
 
-  <script type="module"
-          src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 
-  <script nomodule
-          src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-
-</body>
-
-</html>
+if __name__ == "__main__":
+    main()

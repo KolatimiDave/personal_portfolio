@@ -1,61 +1,132 @@
-# David Olukolatimi — Personal Portfolio (vCard Enhanced)
+# David Olukolatimi - Personal Portfolio
 
-A modern, fully responsive personal portfolio website for showcasing  
-**Machine Learning Engineering, Data Science, MLOps, Cloud, and AI projects.**  
-Built using **HTML, CSS, and JavaScript**.
+A responsive personal portfolio for David Olukolatimi, focused on machine learning engineering, data science, MLOps, cloud work, AI projects, services, writing, and contact enquiries.
 
-This is a customized and extended version of the vCard template originally created by **codewithsadee**.
+The site stays intentionally lightweight: generated static HTML, shared CSS, vanilla JavaScript, and a small FastAPI backend for the contact form.
 
----
+## Features
 
-## 🚀 Live Demo (Render Deployment)
-> Coming soon — after deployment on Render.
+- Responsive portfolio pages for Home, Experience, Projects & Research, Writing, Services, and Contact Me
+- Shared route metadata for page titles, descriptions, canonical URLs, sitemap, and social cards
+- Vanilla JavaScript interactions for navigation, theme preference, filters, recommendations, service actions, currency display, and contact validation
+- FastAPI contact endpoint using Resend
+- No analytics or visitor tracking
 
----
-
-## 📸 Screenshots
-
-### Desktop View
-![Desktop Demo](./website-demo-image/desktop.png)
-
-### Mobile View
-![Mobile Demo](./website-demo-image/mobile.png)
-
----
-
-## ✨ Features
-
-- Fully responsive personal portfolio  
-- Single-page smooth navigation (About, Resume, Portfolio, Blog, Contact)  
-- Dynamic modal for testimonials  
-- Project filtering (Computer Vision, NLP, ML & Analytics)  
-- Custom skills, experience, and AI/ML project sections  
-- Contact form with built-in validation  
-- Sidebar with expandable contact details  
-- Clean, modern UI  
-- Lightweight and fast (no frameworks required)
-
----
-
-## 🧠 Tech Stack
-
-- **HTML5**  
-- **CSS3**  
-- **JavaScript (Vanilla JS)**  
-- **Ionicons**  
-- **Responsive Grid & Flex UI**  
-
----
-
-## 📂 Project Structure
+## Project Structure
 
 ```plaintext
 /
-│── assets/
-│   ├── css/
-│   ├── js/
-│   └── images/
-│
-│── index.html
-│── README.md
-│── LICENSE
+  assets/
+    css/
+    images/
+    js/
+    resume/
+  backend/
+    main.py
+    requirements.txt
+  scripts/
+    build-site.mjs
+    build-site.ps1
+    check_content_markers.py
+    check_local_assets.py
+    check_route_metadata.py
+    check-site.mjs
+    enhance_html_images.py
+    optimize-images.mjs
+    optimize_images.py
+  src/
+    data/
+      routes.json
+      site.json
+  index.html
+  home/
+  experience/
+  projects-research/
+  writing/
+  services/
+  contact/
+  sitemap.xml
+  robots.txt
+```
+
+## Local Workflow
+
+Install Node.js, then run:
+
+```bash
+npm install
+npm run build
+npm run check
+```
+
+On Windows without Node available, the PowerShell generator can update the static pages:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\build-site.ps1
+```
+
+Image optimization uses Sharp:
+
+```bash
+npm run optimize:images
+```
+
+Review the generated files after optimization before switching image references to the optimized versions.
+
+## Backend
+
+The contact API lives in `backend/main.py`.
+
+Required environment variables:
+
+- `RESEND_API_KEY`
+- `TO_EMAIL`
+- `FROM_EMAIL`
+
+Optional environment variables:
+
+- `RATE_LIMIT_WINDOW_SECONDS` defaults to `900`
+- `RATE_LIMIT_MAX_REQUESTS` defaults to `5`
+
+Local backend start:
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+## Render Deployment
+
+Frontend:
+
+- Build command: `npm install && npm run build`
+- Publish directory: repository root, or the static directory configured for your Render static site
+
+Backend:
+
+- Root directory: `backend`
+- Build command: `pip install -r requirements.txt`
+- Start command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+- Add the required Resend environment variables listed above
+
+Keep frontend domains aligned with the backend CORS allowlist in `backend/main.py`.
+
+## Route Notes
+
+Primary public routes:
+
+- `/`
+- `/home/`
+- `/experience/`
+- `/projects-research/`
+- `/writing/`
+- `/services/`
+- `/contact/`
+
+Compatibility routes are generated for older links:
+
+- `/about/` points to Home
+- `/resume/` points to Experience
+- `/portfolio/` points to Projects & Research
+- `/blog/` points to Writing
