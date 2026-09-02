@@ -33,6 +33,47 @@ async function collectHtmlFiles(dir = root) {
   return files;
 }
 
+function asArray(value) {
+  return Array.isArray(value) ? value : [value];
+}
+
+function validateStructuredData(html, relative) {
+  const scripts = [...html.matchAll(/<script\s+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi)];
+
+  for (const [index, script] of scripts.entries()) {
+    let data;
+    try {
+      data = JSON.parse(script[1]);
+    } catch (error) {
+      failures.push(`Invalid JSON-LD in ${relative} script ${index + 1}: ${error.message}`);
+      continue;
+    }
+
+    const graph = data["@graph"] ? asArray(data["@graph"]) : [data];
+    const personIds = new Set(
+      graph
+        .filter((node) => node && asArray(node["@type"]).includes("Person") && node["@id"])
+        .map((node) => node["@id"])
+    );
+
+    for (const node of graph) {
+      if (!node || !asArray(node["@type"]).includes("ProfilePage")) continue;
+
+      if (!node.mainEntity) {
+        failures.push(`ProfilePage missing mainEntity in ${relative}`);
+        continue;
+      }
+
+      const mainEntityId = node.mainEntity["@id"];
+      if (!mainEntityId) {
+        failures.push(`ProfilePage mainEntity missing @id in ${relative}`);
+      } else if (!personIds.has(mainEntityId)) {
+        failures.push(`ProfilePage mainEntity does not reference a Person node in ${relative}: ${mainEntityId}`);
+      }
+    }
+  }
+}
+
 for (const route of routes) {
   const file = route.url === "/" ? "index.html" : `${route.name}/index.html`;
   if (!await exists(file)) failures.push(`Missing generated route: ${file}`);
@@ -59,6 +100,8 @@ for (const file of await collectHtmlFiles()) {
   if (!/<meta property="og:image"/i.test(html)) {
     failures.push(`Missing Open Graph image in ${relative}`);
   }
+
+  validateStructuredData(html, relative);
 
   const h1Count = (html.match(/<h1\b/gi) || []).length;
   const articleCount = (html.match(/<article\b/gi) || []).length;

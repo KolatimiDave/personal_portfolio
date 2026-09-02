@@ -83,6 +83,10 @@ function Get-RouteSchema {
     about = @{ "@id" = $personId }
   }
 
+  if ($pageType -eq "ProfilePage") {
+    $page.mainEntity = @{ "@id" = $personId }
+  }
+
   if ($Route.name -ne "home") {
     $page.breadcrumb = @{ "@id" = "$Canonical#breadcrumb" }
     [void]$graph.Add([ordered]@{

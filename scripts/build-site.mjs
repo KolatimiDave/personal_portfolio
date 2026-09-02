@@ -103,6 +103,10 @@ function routeSchema(route, canonical) {
     "about": { "@id": personId }
   };
 
+  if (pageType === "ProfilePage") {
+    pageNode.mainEntity = { "@id": personId };
+  }
+
   if (route.name !== "home") {
     pageNode.breadcrumb = { "@id": `${canonical}#breadcrumb` };
     graph.push({
